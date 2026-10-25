@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>HostelSafe Phase 1 - Pure Software SaaS (Multi-Bed Rooms, Non-QR Digital Pass, Zero Hardware)</title>
+  <title>HostelSafe Phase 1 - Pure Software SaaS (Complete Registration & Operational Suite)</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
@@ -128,7 +128,7 @@
       color: #fff;
     }
 
-    /* Sub Navigation Bar for Dashboards and Apps */
+    /* Sub Navigation Bar for All Phase 1 Screens */
     .role-nav-group {
       display: flex;
       gap: 4px;
@@ -140,8 +140,8 @@
     }
 
     .role-btn {
-      padding: 5px 10px;
-      font-size: 0.72rem;
+      padding: 5px 9px;
+      font-size: 0.71rem;
       font-weight: 700;
       border-radius: var(--radius-sm);
       border: none;
@@ -151,7 +151,8 @@
       transition: all 0.2s;
       display: inline-flex;
       align-items: center;
-      gap: 5px;
+      gap: 4px;
+      white-space: nowrap;
     }
 
     .role-btn.active {
@@ -247,6 +248,61 @@
     .btn-secondary:hover { background: rgba(255, 255, 255, 0.14); }
     .btn-sm { padding: 4px 8px; font-size: 0.68rem; }
 
+    /* Wizard Step Progress */
+    .wizard-steps {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #090f1f;
+      border: 1px solid var(--border-subtle);
+      padding: 10px 16px;
+      border-radius: var(--radius-md);
+      margin-bottom: 8px;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .wizard-step-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.74rem;
+      font-weight: 700;
+      color: var(--text-dim);
+    }
+
+    .wizard-step-item.active {
+      color: #38bdf8;
+    }
+
+    .wizard-step-item.completed {
+      color: #34d399;
+    }
+
+    .wizard-step-num {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid var(--border-subtle);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.68rem;
+    }
+
+    .wizard-step-item.active .wizard-step-num {
+      background: #3b82f6;
+      color: #fff;
+      border-color: #60a5fa;
+    }
+
+    .wizard-step-item.completed .wizard-step-num {
+      background: #10b981;
+      color: #fff;
+      border-color: #34d399;
+    }
+
     /* Phone Shell Simulator for Mobile App Views */
     .mobile-simulator-wrapper {
       display: flex;
@@ -287,15 +343,6 @@
       box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
       position: relative;
       overflow: hidden;
-    }
-
-    .pass-card-box::before {
-      content: "";
-      position: absolute;
-      top: -40px; right: -40px;
-      width: 100px; height: 100px;
-      background: radial-gradient(circle, rgba(59, 130, 246, 0.2), transparent 70%);
-      pointer-events: none;
     }
 
     .gate-pin-badge {
@@ -545,10 +592,16 @@
       </a>
     </div>
 
-    <!-- Interactive Navigation: Both Website Dashboard & Mobile App for Admin & Warden -->
+    <!-- Interactive Navigation for All Phase 1 Features -->
     <div class="role-nav-group">
+      <button class="role-btn" onclick="switchView('hostel_onboarding')">
+        <span>🏢</span> Register Hostel
+      </button>
+      <button class="role-btn" onclick="switchView('resident_onboarding')">
+        <span>🎓</span> Resident Onboard
+      </button>
       <button class="role-btn active" onclick="switchView('admin_web')">
-        <span>🖥️</span> Admin Web Dashboard
+        <span>🖥️</span> Admin Web Desk
       </button>
       <button class="role-btn" onclick="switchView('admin_app')">
         <span>📱</span> Admin App
@@ -574,13 +627,13 @@
   <!-- SaaS Sub Context Bar -->
   <div class="saas-bar">
     <div style="display:flex; align-items:center; gap:8px;">
-      <span class="saas-pill">ZERO HARDWARE &bull; NO QR</span>
-      <span style="color:var(--text-muted);">Tenant: <strong>Oxford &amp; Shivalik Student Housing</strong></span>
+      <span class="saas-pill">ALL PHASE 1 SCREENS</span>
+      <span style="color:var(--text-muted);">Active Hostel: <strong>Shivalik Student Living (Code: HOSTEL-SHIV-204)</strong></span>
       <span style="color:var(--text-dim);">•</span>
-      <span style="color:#34d399;">Active License: <strong>Campus Digital Pro</strong></span>
+      <span style="color:#34d399;">License: <strong>Campus Digital Pro</strong></span>
     </div>
     <div style="display:flex; align-items:center; gap:12px; font-size:0.72rem;">
-      <span>Gate Clearance: <strong style="color:#38bdf8;">Digital 4-Digit PIN &amp; Roll/Bed Search</strong></span>
+      <span>Gate Auth: <strong style="color:#38bdf8;">4-Digit PIN &amp; Roll/Bed Search</strong></span>
       <span>Rooms: <strong style="color:#10b981;">Multi-Bed Sharing Architecture</strong></span>
       <span>Hardware: <strong style="color:#fbbf24;">₹0 (None)</strong></span>
     </div>
@@ -601,6 +654,7 @@
     // In-Memory State for Phase 1 Demo (Multi-Bed Room Architecture)
     const phase1Data = {
       property: "Shivalik North Campus (Delhi)",
+      hostelCode: "HOSTEL-SHIV-204",
       properties: ["Shivalik North Campus (Delhi)", "Aravalli Tech Park (Bengaluru)"],
       stats: {
         totalRooms: 120,
@@ -716,7 +770,17 @@
 
     function switchView(view) {
       currentView = view;
-      const viewKeys = ["admin_web", "admin_app", "warden_web", "warden_app", "resident", "parent", "pricing"];
+      const viewKeys = [
+        "hostel_onboarding", 
+        "resident_onboarding", 
+        "admin_web", 
+        "admin_app", 
+        "warden_web", 
+        "warden_app", 
+        "resident", 
+        "parent", 
+        "pricing"
+      ];
       document.querySelectorAll(".role-btn").forEach((btn, idx) => {
         btn.classList.toggle("active", viewKeys[idx] === view);
       });
@@ -903,12 +967,313 @@
       render();
     }
 
+    // Function to finish Warden/Owner Hostel Wizard
+    function completeHostelSetup() {
+      const hostelName = document.getElementById("wizardHostelName")?.value || "Shivalik Student Living";
+      const city = document.getElementById("wizardHostelCity")?.value || "Delhi NCR";
+      const roomNo = document.getElementById("wizardRoomNo")?.value || "B-305";
+      const sharing = document.getElementById("wizardSharing")?.value || "Double Sharing";
+      const curfewTime = document.getElementById("wizardCurfew")?.value || "20:30";
+
+      // Add newly configured room to in-memory state
+      phase1Data.rooms.unshift({
+        roomNo: roomNo,
+        wing: "Wing B",
+        floor: "3rd Floor",
+        sharingType: sharing,
+        capacity: 2,
+        beds: [
+          { bedId: `${roomNo}-A`, label: "Bed A", status: "vacant", residentName: "None (Available)", rollNo: "-", state: "vacant" },
+          { bedId: `${roomNo}-B`, label: "Bed B", status: "vacant", residentName: "None (Available)", rollNo: "-", state: "vacant" }
+        ]
+      });
+
+      phase1Data.stats.totalRooms += 1;
+      phase1Data.stats.totalBeds += 2;
+      phase1Data.stats.vacantBeds += 2;
+
+      showToast(`Hostel "${hostelName}" registered! Unique Code: ${phase1Data.hostelCode}.`);
+      switchView("admin_web");
+    }
+
+    // Function to finish Resident Registration Wizard
+    function completeResidentOnboarding() {
+      const name = document.getElementById("resWizardName")?.value || "Aditya Roy";
+      const rollNo = document.getElementById("resWizardRoll")?.value || "CS2026-190";
+      const parentName = document.getElementById("resWizardParent")?.value || "Sunil Roy";
+      const parentPhone = document.getElementById("resWizardParentPhone")?.value || "+91 98110 33221";
+      const bedSelection = document.getElementById("resWizardBedSelect")?.value || "B-204-B";
+
+      // Assign student to selected vacant bed
+      const [roomNumber, bedLetter] = bedSelection.split("-");
+      const roomMatch = phase1Data.rooms.find(r => r.roomNo === roomNumber || bedSelection.startsWith(r.roomNo));
+      if (roomMatch) {
+        const bed = roomMatch.beds.find(b => b.bedId === bedSelection);
+        if (bed) {
+          bed.status = "occupied";
+          bed.residentName = name;
+          bed.rollNo = rollNo;
+          bed.state = "inside";
+        }
+      }
+
+      // Add to residents roster
+      const newStudent = {
+        id: "stu_" + Date.now(),
+        name: name,
+        rollNo: rollNo,
+        room: roomNumber,
+        bedId: bedSelection,
+        sharing: "Double Sharing",
+        phone: "+91 98990 11223",
+        status: "inside",
+        curfew: "20:30",
+        gatePin: Math.floor(1000 + Math.random() * 9000).toString(),
+        parentPhone: parentPhone,
+        parentName: parentName
+      };
+
+      phase1Data.residents.unshift(newStudent);
+      phase1Data.stats.occupiedBeds += 1;
+      phase1Data.stats.vacantBeds -= 1;
+      phase1Data.stats.insideBeds += 1;
+
+      showToast(`Welcome ${name}! Allocated to Bed ${bedSelection}. Digital Passcard issued.`);
+      switchView("resident");
+    }
+
     function render() {
       const container = document.getElementById("viewContainer");
       if (!container) return;
 
-      // 1. ADMIN WEBSITE DASHBOARD (Multi-Bed Allocation Matrix)
-      if (currentView === "admin_web") {
+      // =========================================================================
+      // SCREEN 1: HOSTEL / WARDEN ONBOARDING WIZARD
+      // =========================================================================
+      if (currentView === "hostel_onboarding") {
+        container.innerHTML = `
+          <div class="ui-card">
+            <div class="ui-card-header">
+              <div>
+                <div class="ui-card-title">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+                  Hostel Owner &amp; Warden Registration Wizard
+                </div>
+                <div style="font-size:0.72rem; color:var(--text-muted); margin-top:2px;">
+                  Set up your hostel property, configure multi-bed sharing rooms, and establish curfew policies in under 5 minutes.
+                </div>
+              </div>
+              <span class="phase-badge">5-MINUTE SETUP</span>
+            </div>
+
+            <!-- Wizard Step Bar -->
+            <div class="wizard-steps">
+              <div class="wizard-step-item completed">
+                <span class="wizard-step-num">✓</span> 1. Phone &amp; SMS OTP
+              </div>
+              <div class="wizard-step-item active">
+                <span class="wizard-step-num">2</span> 2. Property Details
+              </div>
+              <div class="wizard-step-item active">
+                <span class="wizard-step-num">3</span> 3. Multi-Bed Rooms
+              </div>
+              <div class="wizard-step-item active">
+                <span class="wizard-step-num">4</span> 4. Curfew Policy
+              </div>
+              <div class="wizard-step-item">
+                <span class="wizard-step-num">5</span> 5. Admission Code
+              </div>
+            </div>
+
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:16px;">
+              <!-- Section A: Property Profile -->
+              <div style="background:#090f1f; border:1px solid var(--border-subtle); padding:16px; border-radius:var(--radius-md); display:flex; flex-direction:column; gap:10px;">
+                <div style="font-size:0.82rem; font-weight:800; color:#38bdf8;">Step 1: Property Profile &amp; Location</div>
+
+                <div class="form-group">
+                  <label class="form-label">Hostel / PG Name</label>
+                  <input type="text" id="wizardHostelName" class="form-input" value="Shivalik Student Living (North Campus)" />
+                </div>
+
+                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:8px;">
+                  <div class="form-group">
+                    <label class="form-label">City / Metro</label>
+                    <select id="wizardHostelCity" class="form-select">
+                      <option>Delhi NCR</option>
+                      <option>Bengaluru</option>
+                      <option>Kota</option>
+                      <option>Pune</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">Hostel Type</label>
+                    <select class="form-select">
+                      <option>Co-Ed Living</option>
+                      <option>Boys Hostel</option>
+                      <option>Girls Hostel</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label">Full Address</label>
+                  <input type="text" class="form-input" value="Plot 14, University Enclave, Near Metro Gate 2, Delhi 110007" />
+                </div>
+              </div>
+
+              <!-- Section B: Multi-Bed Rooms & Curfew -->
+              <div style="background:#090f1f; border:1px solid var(--border-subtle); padding:16px; border-radius:var(--radius-md); display:flex; flex-direction:column; gap:10px;">
+                <div style="font-size:0.82rem; font-weight:800; color:#10b981;">Step 2: Add Initial Multi-Bed Room &amp; Curfew</div>
+
+                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:8px;">
+                  <div class="form-group">
+                    <label class="form-label">Room Number</label>
+                    <input type="text" id="wizardRoomNo" class="form-input" value="B-305" />
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">Room Sharing Type</label>
+                    <select id="wizardSharing" class="form-select">
+                      <option>Double Sharing (Bed A, Bed B)</option>
+                      <option>Triple Sharing (Bed A, Bed B, Bed C)</option>
+                      <option>Single Private Room</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:8px;">
+                  <div class="form-group">
+                    <label class="form-label">Monthly Rent Per Bed</label>
+                    <input type="text" class="form-input" value="₹9,500" />
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">Evening Curfew Time</label>
+                    <input type="time" id="wizardCurfew" class="form-input" value="20:30" />
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label">Chief Warden Emergency Contact</label>
+                  <input type="text" class="form-input" value="+91 98110 55441 (Warden Ramesh Kumar)" />
+                </div>
+              </div>
+            </div>
+
+            <!-- Footer Action & Hostel Admission Code preview -->
+            <div style="display:flex; justify-content:space-between; align-items:center; border-top:1px solid var(--border-subtle); padding-top:12px; margin-top:8px;">
+              <div style="font-size:0.75rem; color:var(--text-muted);">
+                Admission Code to be generated: <strong style="color:#60a5fa; font-family:'JetBrains Mono', monospace;">${phase1Data.hostelCode}</strong>
+              </div>
+              <button class="btn btn-success" onclick="completeHostelSetup()">
+                🚀 Deploy Hostel &amp; Open Admin Dashboard
+              </button>
+            </div>
+          </div>
+        `;
+      }
+
+      // =========================================================================
+      // SCREEN 2: RESIDENT REGISTRATION & ONBOARDING WIZARD
+      // =========================================================================
+      else if (currentView === "resident_onboarding") {
+        container.innerHTML = `
+          <div class="ui-card">
+            <div class="ui-card-header">
+              <div>
+                <div class="ui-card-title">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                  Resident Onboarding &amp; Bed Allotment Wizard
+                </div>
+                <div style="font-size:0.72rem; color:var(--text-muted); margin-top:2px;">
+                  Students join via Hostel Admission Code, bind their guardian for In-App SMS OTP approvals, and select an available bed.
+                </div>
+              </div>
+              <span class="status-pill status-inside">STUDENT PORTAL</span>
+            </div>
+
+            <!-- Wizard Step Bar -->
+            <div class="wizard-steps">
+              <div class="wizard-step-item completed"><span class="wizard-step-num">✓</span> 1. Phone Auth</div>
+              <div class="wizard-step-item active"><span class="wizard-step-num">2</span> 2. Enter Hostel Code</div>
+              <div class="wizard-step-item active"><span class="wizard-step-num">3</span> 3. Academic Bio</div>
+              <div class="wizard-step-item active"><span class="wizard-step-num">4</span> 4. Guardian Binding</div>
+              <div class="wizard-step-item active"><span class="wizard-step-num">5</span> 5. Bed Selection</div>
+            </div>
+
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:16px;">
+              <!-- Student Profile -->
+              <div style="background:#090f1f; border:1px solid var(--border-subtle); padding:16px; border-radius:var(--radius-md); display:flex; flex-direction:column; gap:10px;">
+                <div style="font-size:0.82rem; font-weight:800; color:#38bdf8;">Step 1: Student Profile &amp; Hostel Code</div>
+
+                <div class="form-group">
+                  <label class="form-label">Hostel Admission Code</label>
+                  <input type="text" class="form-input" value="${phase1Data.hostelCode}" style="font-family:'JetBrains Mono', monospace; color:#34d399; font-weight:700;" />
+                </div>
+
+                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:8px;">
+                  <div class="form-group">
+                    <label class="form-label">Full Name</label>
+                    <input type="text" id="resWizardName" class="form-input" value="Aditya Roy" />
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">Student Roll Number</label>
+                    <input type="text" id="resWizardRoll" class="form-input" value="CS2026-190" style="font-family:'JetBrains Mono', monospace;" />
+                  </div>
+                </div>
+
+                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:8px;">
+                  <div class="form-group">
+                    <label class="form-label">College / University</label>
+                    <input type="text" class="form-input" value="Delhi Technical Campus" />
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">Branch / Course</label>
+                    <input type="text" class="form-input" value="B.Tech Computer Science" />
+                  </div>
+                </div>
+              </div>
+
+              <!-- Parent Linkage & Bed Selection -->
+              <div style="background:#090f1f; border:1px solid var(--border-subtle); padding:16px; border-radius:var(--radius-md); display:flex; flex-direction:column; gap:10px;">
+                <div style="font-size:0.82rem; font-weight:800; color:#fbbf24;">Step 2: Guardian Details &amp; Bed Selection</div>
+
+                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:8px;">
+                  <div class="form-group">
+                    <label class="form-label">Guardian Name</label>
+                    <input type="text" id="resWizardParent" class="form-input" value="Sunil Roy" />
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">Guardian Mobile (For SMS OTP Approvals)</label>
+                    <input type="text" id="resWizardParentPhone" class="form-input" value="+91 98110 33221" />
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label">Select Available Vacant Bed</label>
+                  <select id="resWizardBedSelect" class="form-select">
+                    <option value="B-204-B">Room B-204 • Bed B (Double Sharing - Window Side)</option>
+                    <option value="B-108-B">Room B-108 • Bed B (Double Sharing - Desk Side)</option>
+                    <option value="B-101-C">Room B-101 • Bed C (Triple Sharing)</option>
+                  </select>
+                </div>
+
+                <div style="background:#070d19; padding:8px 12px; border-radius:6px; font-size:0.72rem; color:var(--text-muted);">
+                  ✓ By proceeding, you accept the 20:30 evening curfew and digital sign-off rulebook.
+                </div>
+              </div>
+            </div>
+
+            <div style="display:flex; justify-content:flex-end; border-top:1px solid var(--border-subtle); padding-top:12px; margin-top:8px;">
+              <button class="btn btn-primary" onclick="completeResidentOnboarding()">
+                🎉 Complete Onboarding &amp; Issue Digital Passcard
+              </button>
+            </div>
+          </div>
+        `;
+      }
+
+      // =========================================================================
+      // SCREEN 3: ADMIN WEBSITE DASHBOARD
+      // =========================================================================
+      else if (currentView === "admin_web") {
         container.innerHTML = `
           <div class="ui-card">
             <div class="ui-card-header">
@@ -1073,7 +1438,9 @@
         `;
       }
 
-      // 2. ADMIN MOBILE APP
+      // =========================================================================
+      // SCREEN 4: ADMIN MOBILE APP
+      // =========================================================================
       else if (currentView === "admin_app") {
         container.innerHTML = `
           <div class="mobile-simulator-wrapper">
@@ -1093,13 +1460,13 @@
               <div style="display:grid; grid-template-columns: 1fr 1fr; gap:8px;">
                 <div style="background:#0c162d; border:1px solid var(--border-subtle); padding:10px; border-radius:8px;">
                   <div style="font-size:0.65rem; color:var(--text-muted);">Occupied Beds</div>
-                  <div style="font-size:1.2rem; font-weight:800; color:#38bdf8;">242 / 300</div>
-                  <div style="font-size:0.6rem; color:#34d399;">58 Beds Vacant</div>
+                  <div style="font-size:1.2rem; font-weight:800; color:#38bdf8;">${phase1Data.stats.occupiedBeds} / ${phase1Data.stats.totalBeds}</div>
+                  <div style="font-size:0.6rem; color:#34d399;">${phase1Data.stats.vacantBeds} Beds Vacant</div>
                 </div>
 
                 <div style="background:#0c162d; border:1px solid rgba(239,68,68,0.3); padding:10px; border-radius:8px;">
                   <div style="font-size:0.65rem; color:#f87171;">Defaulters</div>
-                  <div style="font-size:1.2rem; font-weight:800; color:#ef4444;">4 Late</div>
+                  <div style="font-size:1.2rem; font-weight:800; color:#ef4444;">${phase1Data.stats.defaulters} Late</div>
                   <div style="font-size:0.6rem; color:#f87171;">Overdue 20:30</div>
                 </div>
               </div>
@@ -1108,7 +1475,7 @@
               <div style="background:#0c162d; border:1px solid var(--border-subtle); padding:10px; border-radius:8px;">
                 <div style="display:flex; justify-content:space-between; font-size:0.7rem;">
                   <span style="color:var(--text-muted);">Available Beds for Admissions:</span>
-                  <strong style="color:#60a5fa;">58 Vacant Beds</strong>
+                  <strong style="color:#60a5fa;">${phase1Data.stats.vacantBeds} Vacant Beds</strong>
                 </div>
                 <div style="display:flex; justify-content:space-between; font-size:0.65rem; color:var(--text-dim); margin-top:4px;">
                   <span>Wing B: 34 Beds</span>
@@ -1150,7 +1517,9 @@
         `;
       }
 
-      // 3. WARDEN WEBSITE GATE STATION (Non-QR PIN & Roll/Bed Search)
+      // =========================================================================
+      // SCREEN 5: WARDEN WEBSITE GATE STATION
+      // =========================================================================
       else if (currentView === "warden_web") {
         container.innerHTML = `
           <div class="ui-card">
@@ -1194,7 +1563,6 @@
 
               <!-- Verification Result Card -->
               <div id="gateSearchResultCard" style="margin-top:6px;">
-                <!-- Initial render of Aarav -->
                 <div style="background:#091224; border:1px solid #3b82f6; border-radius:10px; padding:16px; display:flex; flex-direction:column; gap:10px;">
                   <div style="display:flex; justify-content:space-between; align-items:flex-start;">
                     <div>
@@ -1248,7 +1616,9 @@
         `;
       }
 
-      // 4. WARDEN MOBILE APP (Bed-by-Bed Night Headcount)
+      // =========================================================================
+      // SCREEN 6: WARDEN MOBILE APP
+      // =========================================================================
       else if (currentView === "warden_app") {
         container.innerHTML = `
           <div class="mobile-simulator-wrapper">
@@ -1342,7 +1712,9 @@
         `;
       }
 
-      // 5. RESIDENT DIGITAL PASSCARD (Non-QR with 4-Digit Security PIN)
+      // =========================================================================
+      // SCREEN 7: RESIDENT DIGITAL PASSCARD
+      // =========================================================================
       else if (currentView === "resident") {
         container.innerHTML = `
           <div style="display:grid; grid-template-columns: 1fr 1fr; gap:16px;">
@@ -1438,7 +1810,9 @@
         `;
       }
 
-      // 6. PARENT APP VIEW (Room & Bed Binding)
+      // =========================================================================
+      // SCREEN 8: PARENT GUARDIAN APP
+      // =========================================================================
       else if (currentView === "parent") {
         container.innerHTML = `
           <div class="ui-card">
@@ -1503,7 +1877,9 @@
         `;
       }
 
-      // 7. SAAS PRICING VIEW
+      // =========================================================================
+      // SCREEN 9: SAAS PRICING VIEW
+      // =========================================================================
       else if (currentView === "pricing") {
         container.innerHTML = `
           <div class="ui-card">
@@ -1524,6 +1900,7 @@
                 <div style="font-size:0.72rem; color:var(--text-muted); display:flex; flex-direction:column; gap:6px; margin:8px 0;">
                   <div>✓ Up to 80 Resident Beds</div>
                   <div>✓ Multi-Bed Room Management (Double/Triple Sharing)</div>
+                  <div>✓ Self-Serve Hostel &amp; Resident Onboarding Wizards</div>
                   <div>✓ Admin Web Dashboard + Admin Mobile App</div>
                   <div>✓ Warden Web Desk + Warden Mobile App</div>
                   <div>✓ Non-QR 4-Digit Digital Security PINs</div>
@@ -1543,6 +1920,7 @@
                 <div style="font-size:0.72rem; color:var(--text-muted); display:flex; flex-direction:column; gap:6px; margin:8px 0;">
                   <div>✓ Up to 400 Resident Beds</div>
                   <div>✓ Up to 3 Venues / Campuses</div>
+                  <div>✓ Self-Serve Hostel &amp; Resident Onboarding Wizards</div>
                   <div>✓ Multi-Property Admin Web Dashboard</div>
                   <div>✓ Visual Room &amp; Bed Allocation Matrix</div>
                   <div>✓ Bed-by-Bed Night Floor Headcount Checklist</div>
