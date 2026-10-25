@@ -161,6 +161,48 @@
       border: 1px solid var(--border-strong);
     }
 
+    /* Interactive Guided Story Journey Bar */
+    .guided-journey-bar {
+      background: linear-gradient(90deg, #091224, #0b1a38);
+      border-bottom: 1px solid rgba(59, 130, 246, 0.3);
+      padding: 8px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .journey-steps-group {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .journey-step-btn {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border-subtle);
+      color: #f8fafc;
+      font-size: 0.68rem;
+      font-weight: 700;
+      padding: 4px 8px;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .journey-step-btn:hover, .journey-step-btn.active-step {
+      background: #3b82f6;
+      border-color: #60a5fa;
+      color: #fff;
+    }
+
+    .journey-arrow {
+      color: var(--text-dim);
+      font-size: 0.7rem;
+    }
+
     /* Context Banner */
     .saas-bar {
       background: #090f1e;
@@ -247,6 +289,20 @@
     .btn-secondary { background: rgba(255, 255, 255, 0.08); color: #fff; }
     .btn-secondary:hover { background: rgba(255, 255, 255, 0.14); }
     .btn-sm { padding: 4px 8px; font-size: 0.68rem; }
+
+    /* Flow Stepper Callout */
+    .flow-next-bar {
+      background: linear-gradient(135deg, rgba(59, 130, 246, 0.12), rgba(16, 185, 129, 0.12));
+      border: 1px solid rgba(59, 130, 246, 0.35);
+      border-radius: var(--radius-md);
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 8px;
+    }
 
     /* Wizard Step Progress */
     .wizard-steps {
@@ -343,6 +399,15 @@
       box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
       position: relative;
       overflow: hidden;
+    }
+
+    .pass-card-box::before {
+      content: "";
+      position: absolute;
+      top: -40px; right: -40px;
+      width: 100px; height: 100px;
+      background: radial-gradient(circle, rgba(59, 130, 246, 0.2), transparent 70%);
+      pointer-events: none;
     }
 
     .gate-pin-badge {
@@ -592,37 +657,74 @@
       </a>
     </div>
 
-    <!-- Interactive Navigation for All Phase 1 Features -->
+    <!-- Direct Screen Navigation -->
     <div class="role-nav-group">
-      <button class="role-btn" onclick="switchView('hostel_onboarding')">
-        <span>🏢</span> Register Hostel
+      <button class="role-btn active" onclick="switchView('hostel_onboarding')">
+        <span>🏢</span> 1. Register Hostel
       </button>
       <button class="role-btn" onclick="switchView('resident_onboarding')">
-        <span>🎓</span> Resident Onboard
-      </button>
-      <button class="role-btn active" onclick="switchView('admin_web')">
-        <span>🖥️</span> Admin Web Desk
-      </button>
-      <button class="role-btn" onclick="switchView('admin_app')">
-        <span>📱</span> Admin App
-      </button>
-      <button class="role-btn" onclick="switchView('warden_web')">
-        <span>🖥️</span> Warden Web Desk
-      </button>
-      <button class="role-btn" onclick="switchView('warden_app')">
-        <span>📱</span> Warden App
-      </button>
-      <button class="role-btn" onclick="switchView('resident')">
-        <span>📱</span> Resident Pass
+        <span>🎓</span> 2. Resident Onboard
       </button>
       <button class="role-btn" onclick="switchView('parent')">
-        <span>📱</span> Parent App
+        <span>👨‍👩‍👧</span> 3. Parent App
+      </button>
+      <button class="role-btn" onclick="switchView('resident')">
+        <span>📱</span> 4. Resident Pass
+      </button>
+      <button class="role-btn" onclick="switchView('warden_web')">
+        <span>🖥️</span> 5. Warden Desk
+      </button>
+      <button class="role-btn" onclick="switchView('warden_app')">
+        <span>📱</span> 6. Warden Mobile
+      </button>
+      <button class="role-btn" onclick="switchView('admin_web')">
+        <span>📊</span> 7. Admin Matrix
+      </button>
+      <button class="role-btn" onclick="switchView('admin_app')">
+        <span>📱</span> 8. Admin Mobile
       </button>
       <button class="role-btn" onclick="switchView('pricing')">
-        <span>💳</span> Pricing
+        <span>💳</span> 9. Pricing
       </button>
     </div>
   </header>
+
+  <!-- Interactive Guided Story Stepper Bar -->
+  <div class="guided-journey-bar">
+    <div style="display:flex; align-items:center; gap:8px;">
+      <span style="font-size:0.75rem; font-weight:800; color:#fbbf24; text-transform:uppercase; letter-spacing:0.5px;">
+        👉 Interactive Story Flow:
+      </span>
+      <span style="font-size:0.7rem; color:var(--text-muted);">
+        Follow the natural flow from zero setup to daily gate operations:
+      </span>
+    </div>
+    <div class="journey-steps-group">
+      <button class="journey-step-btn active-step" id="jStep1" onclick="switchView('hostel_onboarding')">
+        1. Owner Registers Hostel
+      </button>
+      <span class="journey-arrow">➔</span>
+      <button class="journey-step-btn" id="jStep2" onclick="switchView('resident_onboarding')">
+        2. Student Enrolls (Code)
+      </button>
+      <span class="journey-arrow">➔</span>
+      <button class="journey-step-btn" id="jStep3" onclick="switchView('parent')">
+        3. Parent SMS OTP Approval
+      </button>
+      <span class="journey-arrow">➔</span>
+      <button class="journey-step-btn" id="jStep4" onclick="switchView('resident')">
+        4. Student 4-Digit Pass PIN
+      </button>
+      <span class="journey-arrow">➔</span>
+      <button class="journey-step-btn" id="jStep5" onclick="switchView('warden_web')">
+        5. Warden Gate Clearance
+      </button>
+      <span class="journey-arrow">➔</span>
+      <button class="journey-step-btn" id="jStep6" onclick="switchView('admin_web')">
+        6. Admin Multi-Bed Tracker
+      </button>
+    </div>
+  </div>
 
   <!-- SaaS Sub Context Bar -->
   <div class="saas-bar">
@@ -748,7 +850,8 @@
       ]
     };
 
-    let currentView = "admin_web";
+    // Default to the first step of the journey so user immediately understands where to start!
+    let currentView = "hostel_onboarding";
     let pinRefreshSecs = 60;
 
     // PIN rotation interval (No QR code)
@@ -773,18 +876,35 @@
       const viewKeys = [
         "hostel_onboarding", 
         "resident_onboarding", 
-        "admin_web", 
-        "admin_app", 
+        "parent", 
+        "resident", 
         "warden_web", 
         "warden_app", 
-        "resident", 
-        "parent", 
+        "admin_web", 
+        "admin_app", 
         "pricing"
       ];
       document.querySelectorAll(".role-btn").forEach((btn, idx) => {
         btn.classList.toggle("active", viewKeys[idx] === view);
       });
+
+      // Highlight journey bar step
+      const stepMap = {
+        "hostel_onboarding": "jStep1",
+        "resident_onboarding": "jStep2",
+        "parent": "jStep3",
+        "resident": "jStep4",
+        "warden_web": "jStep5",
+        "admin_web": "jStep6"
+      };
+      document.querySelectorAll(".journey-step-btn").forEach(btn => btn.classList.remove("active-step"));
+      if (stepMap[view]) {
+        const activeBtn = document.getElementById(stepMap[view]);
+        if (activeBtn) activeBtn.classList.add("active-step");
+      }
+
       render();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
     // Warden Fast Gate Search & Clearance (by Roll No, Bed ID, or PIN)
@@ -992,8 +1112,8 @@
       phase1Data.stats.totalBeds += 2;
       phase1Data.stats.vacantBeds += 2;
 
-      showToast(`Hostel "${hostelName}" registered! Unique Code: ${phase1Data.hostelCode}.`);
-      switchView("admin_web");
+      showToast(`Hostel "${hostelName}" registered! Unique Admission Code: ${phase1Data.hostelCode}.`);
+      switchView("resident_onboarding");
     }
 
     // Function to finish Resident Registration Wizard
@@ -1056,13 +1176,13 @@
               <div>
                 <div class="ui-card-title">
                   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-                  Hostel Owner &amp; Warden Registration Wizard
+                  Step 1: How a Warden / Owner Registers their Hostel
                 </div>
-                <div style="font-size:0.72rem; color:var(--text-muted); margin-top:2px;">
-                  Set up your hostel property, configure multi-bed sharing rooms, and establish curfew policies in under 5 minutes.
+                <div style="font-size:0.75rem; color:var(--text-muted); margin-top:2px;">
+                  Set up your property, add multi-bed sharing rooms, establish curfew rules, and get your unique <strong>Hostel Admission Code</strong>.
                 </div>
               </div>
-              <span class="phase-badge">5-MINUTE SETUP</span>
+              <span class="phase-badge">STEP 1 OF LIFECYCLE</span>
             </div>
 
             <!-- Wizard Step Bar -->
@@ -1087,7 +1207,7 @@
             <div style="display:grid; grid-template-columns: 1fr 1fr; gap:16px;">
               <!-- Section A: Property Profile -->
               <div style="background:#090f1f; border:1px solid var(--border-subtle); padding:16px; border-radius:var(--radius-md); display:flex; flex-direction:column; gap:10px;">
-                <div style="font-size:0.82rem; font-weight:800; color:#38bdf8;">Step 1: Property Profile &amp; Location</div>
+                <div style="font-size:0.82rem; font-weight:800; color:#38bdf8;">Property Profile &amp; Location</div>
 
                 <div class="form-group">
                   <label class="form-label">Hostel / PG Name</label>
@@ -1105,7 +1225,7 @@
                     </select>
                   </div>
                   <div class="form-group">
-                    <label class="form-label">Hostel Type</label>
+                    <label class="form-label">Hostel Category</label>
                     <select class="form-select">
                       <option>Co-Ed Living</option>
                       <option>Boys Hostel</option>
@@ -1122,7 +1242,7 @@
 
               <!-- Section B: Multi-Bed Rooms & Curfew -->
               <div style="background:#090f1f; border:1px solid var(--border-subtle); padding:16px; border-radius:var(--radius-md); display:flex; flex-direction:column; gap:10px;">
-                <div style="font-size:0.82rem; font-weight:800; color:#10b981;">Step 2: Add Initial Multi-Bed Room &amp; Curfew</div>
+                <div style="font-size:0.82rem; font-weight:800; color:#10b981;">Add Multi-Bed Room &amp; Curfew Policy</div>
 
                 <div style="display:grid; grid-template-columns: 1fr 1fr; gap:8px;">
                   <div class="form-group">
@@ -1130,7 +1250,7 @@
                     <input type="text" id="wizardRoomNo" class="form-input" value="B-305" />
                   </div>
                   <div class="form-group">
-                    <label class="form-label">Room Sharing Type</label>
+                    <label class="form-label">Sharing Capacity</label>
                     <select id="wizardSharing" class="form-select">
                       <option>Double Sharing (Bed A, Bed B)</option>
                       <option>Triple Sharing (Bed A, Bed B, Bed C)</option>
@@ -1157,13 +1277,16 @@
               </div>
             </div>
 
-            <!-- Footer Action & Hostel Admission Code preview -->
-            <div style="display:flex; justify-content:space-between; align-items:center; border-top:1px solid var(--border-subtle); padding-top:12px; margin-top:8px;">
-              <div style="font-size:0.75rem; color:var(--text-muted);">
-                Admission Code to be generated: <strong style="color:#60a5fa; font-family:'JetBrains Mono', monospace;">${phase1Data.hostelCode}</strong>
+            <!-- Footer Action & Explanation -->
+            <div class="flow-next-bar">
+              <div>
+                <strong style="color:#fff; font-size:0.82rem;">What happens when you click Deploy?</strong>
+                <div style="font-size:0.72rem; color:var(--text-muted); margin-top:2px;">
+                  The system creates your multi-bed rooms and issues admission code <strong style="color:#60a5fa; font-family:'JetBrains Mono', monospace;">HOSTEL-SHIV-204</strong> for students to join.
+                </div>
               </div>
               <button class="btn btn-success" onclick="completeHostelSetup()">
-                🚀 Deploy Hostel &amp; Open Admin Dashboard
+                🚀 Deploy Hostel &amp; Next: Student Joins with Code ➔
               </button>
             </div>
           </div>
@@ -1180,13 +1303,13 @@
               <div>
                 <div class="ui-card-title">
                   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-                  Resident Onboarding &amp; Bed Allotment Wizard
+                  Step 2: How a Resident Registers &amp; Chooses a Bed
                 </div>
-                <div style="font-size:0.72rem; color:var(--text-muted); margin-top:2px;">
-                  Students join via Hostel Admission Code, bind their guardian for In-App SMS OTP approvals, and select an available bed.
+                <div style="font-size:0.75rem; color:var(--text-muted); margin-top:2px;">
+                  Student enters the Hostel Code, inputs their academic roll number, binds their parent's phone, and picks an available bed.
                 </div>
               </div>
-              <span class="status-pill status-inside">STUDENT PORTAL</span>
+              <span class="status-pill status-inside">STEP 2 OF LIFECYCLE</span>
             </div>
 
             <!-- Wizard Step Bar -->
@@ -1201,16 +1324,16 @@
             <div style="display:grid; grid-template-columns: 1fr 1fr; gap:16px;">
               <!-- Student Profile -->
               <div style="background:#090f1f; border:1px solid var(--border-subtle); padding:16px; border-radius:var(--radius-md); display:flex; flex-direction:column; gap:10px;">
-                <div style="font-size:0.82rem; font-weight:800; color:#38bdf8;">Step 1: Student Profile &amp; Hostel Code</div>
+                <div style="font-size:0.82rem; font-weight:800; color:#38bdf8;">Student Profile &amp; Hostel Code</div>
 
                 <div class="form-group">
-                  <label class="form-label">Hostel Admission Code</label>
+                  <label class="form-label">Hostel Admission Code (Given by Warden)</label>
                   <input type="text" class="form-input" value="${phase1Data.hostelCode}" style="font-family:'JetBrains Mono', monospace; color:#34d399; font-weight:700;" />
                 </div>
 
                 <div style="display:grid; grid-template-columns: 1fr 1fr; gap:8px;">
                   <div class="form-group">
-                    <label class="form-label">Full Name</label>
+                    <label class="form-label">Student Full Name</label>
                     <input type="text" id="resWizardName" class="form-input" value="Aditya Roy" />
                   </div>
                   <div class="form-group">
@@ -1225,23 +1348,23 @@
                     <input type="text" class="form-input" value="Delhi Technical Campus" />
                   </div>
                   <div class="form-group">
-                    <label class="form-label">Branch / Course</label>
-                    <input type="text" class="form-input" value="B.Tech Computer Science" />
+                    <label class="form-label">Branch / Year</label>
+                    <input type="text" class="form-input" value="B.Tech CS (Year 2)" />
                   </div>
                 </div>
               </div>
 
               <!-- Parent Linkage & Bed Selection -->
               <div style="background:#090f1f; border:1px solid var(--border-subtle); padding:16px; border-radius:var(--radius-md); display:flex; flex-direction:column; gap:10px;">
-                <div style="font-size:0.82rem; font-weight:800; color:#fbbf24;">Step 2: Guardian Details &amp; Bed Selection</div>
+                <div style="font-size:0.82rem; font-weight:800; color:#fbbf24;">Parent Binding &amp; Bed Selection</div>
 
                 <div style="display:grid; grid-template-columns: 1fr 1fr; gap:8px;">
                   <div class="form-group">
-                    <label class="form-label">Guardian Name</label>
+                    <label class="form-label">Parent / Guardian Name</label>
                     <input type="text" id="resWizardParent" class="form-input" value="Sunil Roy" />
                   </div>
                   <div class="form-group">
-                    <label class="form-label">Guardian Mobile (For SMS OTP Approvals)</label>
+                    <label class="form-label">Parent Mobile (For In-App SMS OTPs)</label>
                     <input type="text" id="resWizardParentPhone" class="form-input" value="+91 98110 33221" />
                   </div>
                 </div>
@@ -1256,14 +1379,20 @@
                 </div>
 
                 <div style="background:#070d19; padding:8px 12px; border-radius:6px; font-size:0.72rem; color:var(--text-muted);">
-                  ✓ By proceeding, you accept the 20:30 evening curfew and digital sign-off rulebook.
+                  ✓ Parent phone is registered for mandatory In-App SMS OTP pass approval.
                 </div>
               </div>
             </div>
 
-            <div style="display:flex; justify-content:flex-end; border-top:1px solid var(--border-subtle); padding-top:12px; margin-top:8px;">
+            <div class="flow-next-bar">
+              <div>
+                <strong style="color:#fff; font-size:0.82rem;">What happens next?</strong>
+                <div style="font-size:0.72rem; color:var(--text-muted); margin-top:2px;">
+                  Student is allocated to Bed B-204-B, parent account is bound, and the active Digital Passcard is issued.
+                </div>
+              </div>
               <button class="btn btn-primary" onclick="completeResidentOnboarding()">
-                🎉 Complete Onboarding &amp; Issue Digital Passcard
+                🎉 Complete Onboard &amp; Next: View Active Pass ➔
               </button>
             </div>
           </div>
@@ -1271,7 +1400,400 @@
       }
 
       // =========================================================================
-      // SCREEN 3: ADMIN WEBSITE DASHBOARD
+      // SCREEN 3: PARENT GUARDIAN APP
+      // =========================================================================
+      else if (currentView === "parent") {
+        container.innerHTML = `
+          <div class="ui-card">
+            <div class="ui-card-header">
+              <div>
+                <div class="ui-card-title">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                  Step 3: Parent Guardian Mobile App (SMS OTP Approval)
+                </div>
+                <div style="font-size:0.75rem; color:var(--text-muted);">Guardian: Rajesh Sharma (Phone: +91 98110 99881) • In-App Outing Authorization</div>
+              </div>
+              <span class="saas-pill">STEP 3 OF LIFECYCLE</span>
+            </div>
+
+            <!-- Cross-City Ward Cards with Bed Details -->
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:12px; margin-top:8px;">
+              <div style="background:#090f1f; border:1px solid var(--border-strong); border-radius:var(--radius-md); padding:12px;">
+                <div style="display:flex; justify-content:space-between;">
+                  <strong style="color:#fff;">Aarav Sharma</strong>
+                  <span class="status-pill status-inside">INSIDE HOSTEL</span>
+                </div>
+                <div style="font-size:0.7rem; color:var(--text-muted); margin:4px 0;">
+                  📍 Shivalik North Campus • Delhi NCR • <strong style="color:#38bdf8;">Bed B-204-A</strong>
+                </div>
+                <div style="font-size:0.68rem; color:#34d399;">✓ Safe inside hostel. Curfew tonight at 20:30.</div>
+              </div>
+
+              <div style="background:#090f1f; border:1px solid #f59e0b; border-radius:var(--radius-md); padding:12px;">
+                <div style="display:flex; justify-content:space-between;">
+                  <strong style="color:#fff;">Ananya Sharma</strong>
+                  <span class="status-pill status-outside">OUTING PENDING APPROVAL</span>
+                </div>
+                <div style="font-size:0.7rem; color:var(--text-muted); margin:4px 0;">
+                  📍 Aravalli Tech Park • Bengaluru • <strong style="color:#fbbf24;">Bed W1-305-B</strong>
+                </div>
+                <div style="font-size:0.68rem; color:#fbbf24;">⚡ Weekend Leave requested for IISC Tech Symposium.</div>
+              </div>
+            </div>
+
+            <!-- Outing Pass Queue -->
+            <div style="margin-top:12px;">
+              <div style="font-size:0.78rem; font-weight:800; color:#fff; margin-bottom:8px;">
+                Pending Outing Pass Requests (In-App SMS OTP Endorsement)
+              </div>
+              ${phase1Data.pendingParentPasses.length === 0 ? `
+                <div style="padding:16px; background:#090f1f; border-radius:6px; font-size:0.75rem; color:var(--text-dim); text-align:center;">
+                  No pending pass requests. All wards currently accounted for.
+                </div>
+              ` : phase1Data.pendingParentPasses.map(p => `
+                <div style="background:#091222; border:1px solid rgba(245,158,11,0.3); border-radius:var(--radius-sm); padding:12px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+                  <div>
+                    <div style="font-weight:700; color:#fff;">${p.studentName} — ${p.type} (${p.city})</div>
+                    <div style="font-size:0.7rem; color:var(--text-muted);">Allocated Bed: <strong style="color:#38bdf8;">${p.bedId}</strong> • Destination: ${p.destination} • Return: ${p.returnExpected}</div>
+                  </div>
+                  <div style="display:flex; gap:6px;">
+                    <button class="btn btn-danger btn-sm" onclick="showToast('Outing Pass Denied.');">Deny</button>
+                    <button class="btn btn-success btn-sm" onclick="openParentOtpModal('${p.id}')">
+                      Verify SMS OTP &amp; Approve In-App
+                    </button>
+                  </div>
+                </div>
+              `).join('')}
+            </div>
+
+            <div class="flow-next-bar">
+              <div>
+                <strong style="color:#fff; font-size:0.82rem;">Next Step in Journey:</strong>
+                <div style="font-size:0.72rem; color:var(--text-muted); margin-top:2px;">
+                  Once parent approves, see how the resident receives their active 4-Digit Security PIN.
+                </div>
+              </div>
+              <button class="btn btn-primary" onclick="switchView('resident')">
+                View Resident Digital Passcard ➔
+              </button>
+            </div>
+          </div>
+        `;
+      }
+
+      // =========================================================================
+      // SCREEN 4: RESIDENT DIGITAL PASSCARD
+      // =========================================================================
+      else if (currentView === "resident") {
+        container.innerHTML = `
+          <div style="display:grid; grid-template-columns: 1fr 1fr; gap:16px;">
+            <!-- Non-QR Digital Passcard -->
+            <div class="ui-card">
+              <div class="ui-card-header">
+                <div class="ui-card-title">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                  Step 4: Resident Mobile Pass (Non-QR with 4-Digit PIN)
+                </div>
+                <span class="status-pill status-inside">ACTIVE PASS</span>
+              </div>
+
+              <div class="pass-card-box">
+                <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+                  <div>
+                    <div style="font-size:1.15rem; font-weight:800; color:#fff;">Aarav Sharma</div>
+                    <div style="font-size:0.72rem; color:var(--text-muted); margin-top:2px;">
+                      Roll: <span style="font-family:'JetBrains Mono', monospace; color:#60a5fa;">CS2026-042</span>
+                    </div>
+                  </div>
+                  <div style="text-align:right;">
+                    <div style="font-size:0.65rem; color:var(--text-dim); text-transform:uppercase;">Allocated Bed</div>
+                    <strong style="color:#34d399; font-size:0.85rem;">Bed B-204-A</strong>
+                    <div style="font-size:0.65rem; color:var(--text-muted);">Double Sharing</div>
+                  </div>
+                </div>
+
+                <!-- 4-Digit Live PIN Block -->
+                <div class="gate-pin-badge">
+                  <div style="font-size:0.65rem; color:var(--text-muted); text-transform:uppercase; letter-spacing:1px;">
+                    State this 4-Digit PIN to Warden at Gate
+                  </div>
+                  <div class="gate-pin-number">8421</div>
+                  <div style="font-size:0.65rem; color:#38bdf8; display:flex; align-items:center; gap:4px;">
+                    <span>⏱ Security PIN rotates in:</span>
+                    <strong id="pinTimerVal" style="color:#fbbf24;">${pinRefreshSecs}s</strong>
+                  </div>
+                </div>
+
+                <div style="background:#070d18; padding:10px 12px; border-radius:6px; font-size:0.72rem; display:flex; justify-content:space-between;">
+                  <div><span style="color:var(--text-dim);">Outing Type:</span> <strong style="color:#fff;">Day Outing</strong></div>
+                  <div><span style="color:var(--text-dim);">Return Curfew:</span> <strong style="color:#fbbf24;">20:30 Tonight</strong></div>
+                </div>
+
+                <div style="font-size:0.68rem; color:var(--text-dim); text-align:center;">
+                  Zero Camera Needed &bull; No QR Code &bull; State your Roll No or PIN at the gate desk.
+                </div>
+              </div>
+            </div>
+
+            <!-- Apply Pass Form -->
+            <div class="ui-card">
+              <div class="ui-card-header">
+                <div class="ui-card-title">Apply Outing / Day Pass</div>
+                <span style="font-size:0.7rem; color:#fbbf24;">Evening Curfew: 20:30</span>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">Outing Type</label>
+                <select class="form-select">
+                  <option>Day Outing (City Limits - Return by 20:30)</option>
+                  <option>Late Night Pass (Requires Parent In-App SMS OTP Approval)</option>
+                  <option>Weekend Overnight Leave</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">Destination</label>
+                <input type="text" class="form-input" value="Central University Science Library" />
+              </div>
+
+              <div style="display:grid; grid-template-columns: 1fr 1fr; gap:8px;">
+                <div class="form-group">
+                  <label class="form-label">Expected Departure</label>
+                  <input type="time" class="form-input" value="16:00" />
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Expected Return</label>
+                  <input type="time" class="form-input" value="20:00" />
+                </div>
+              </div>
+
+              <button class="btn btn-primary" onclick="showToast('Outing Pass request submitted! Guardian will receive In-App authorization alert.');">
+                Submit Outing Request
+              </button>
+
+              <div class="flow-next-bar" style="margin-top:10px;">
+                <div>
+                  <strong style="color:#fff; font-size:0.78rem;">Next Step in Journey:</strong>
+                  <div style="font-size:0.68rem; color:var(--text-muted);">See how the Warden verifies this PIN at the gate desk.</div>
+                </div>
+                <button class="btn btn-success btn-sm" onclick="switchView('warden_web')">
+                  Go to Warden Gate Desk ➔
+                </button>
+              </div>
+            </div>
+          </div>
+        `;
+      }
+
+      // =========================================================================
+      // SCREEN 5: WARDEN WEBSITE GATE STATION
+      // =========================================================================
+      else if (currentView === "warden_web") {
+        container.innerHTML = `
+          <div class="ui-card">
+            <div class="ui-card-header">
+              <div>
+                <div class="ui-card-title">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                  Step 5: Warden Gate Station (Digital PIN &amp; Bed Search)
+                </div>
+                <div style="font-size:0.75rem; color:var(--text-muted);">
+                  Zero camera scanning required. Clearance by 4-Digit Pass PIN, Student Roll No, or Bed ID.
+                </div>
+              </div>
+              <div style="display:flex; gap:6px;">
+                <span class="status-pill status-inside">STATION ACTIVE</span>
+                <span class="status-pill status-outside">CURFEW: 20:30</span>
+              </div>
+            </div>
+          </div>
+
+          <div style="display:grid; grid-template-columns: 1.1fr 1fr; gap:16px;">
+            <!-- Fast Clearance Search Desk -->
+            <div class="ui-card">
+              <div class="ui-card-header">
+                <div class="ui-card-title">Gate Clearance Desk</div>
+                <span style="font-size:0.68rem; color:#38bdf8;">Non-QR Digital Verification</span>
+              </div>
+
+              <div style="display:flex; gap:6px;">
+                <input type="text" id="gateSearchInput" class="form-input" style="flex:1; font-size:0.85rem;" placeholder="Search Roll No, Bed ID (e.g. B-204-A), or PIN (e.g. 8421)" value="8421" />
+                <button class="btn btn-primary" onclick="searchGateResident()">Verify</button>
+              </div>
+
+              <!-- Quick Demo Lookup Pills -->
+              <div style="display:flex; gap:6px; flex-wrap:wrap; font-size:0.68rem; align-items:center;">
+                <span style="color:var(--text-dim);">Quick test:</span>
+                <button class="btn btn-secondary btn-sm" onclick="quickFillGateSearch('8421')">PIN: 8421 (Aarav)</button>
+                <button class="btn btn-secondary btn-sm" onclick="quickFillGateSearch('B-108-A')">Bed: B-108-A (Rohit)</button>
+                <button class="btn btn-secondary btn-sm" onclick="quickFillGateSearch('EC2026-015')">Roll: EC2026-015 (Vikram)</button>
+              </div>
+
+              <!-- Verification Result Card -->
+              <div id="gateSearchResultCard" style="margin-top:6px;">
+                <div style="background:#091224; border:1px solid #3b82f6; border-radius:10px; padding:16px; display:flex; flex-direction:column; gap:10px;">
+                  <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+                    <div>
+                      <div style="font-size:1.05rem; font-weight:800; color:#fff;">Aarav Sharma</div>
+                      <div style="font-size:0.75rem; color:var(--text-muted); margin-top:2px;">
+                        Roll: <span style="font-family:'JetBrains Mono', monospace; color:#60a5fa;">CS2026-042</span> • Allocated Bed: <strong style="color:#34d399;">Bed B-204-A</strong> (Double Sharing)
+                      </div>
+                    </div>
+                    <span class="status-pill status-inside">INSIDE PREMISES</span>
+                  </div>
+
+                  <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap:8px; background:#070d19; padding:8px 12px; border-radius:6px; font-size:0.72rem;">
+                    <div><span style="color:var(--text-dim);">Room:</span> <strong style="color:#fff;">B-204</strong></div>
+                    <div><span style="color:var(--text-dim);">Curfew:</span> <strong style="color:#fbbf24;">20:30 Tonight</strong></div>
+                    <div><span style="color:var(--text-dim);">Security PIN:</span> <strong style="color:#38bdf8; font-family:'JetBrains Mono', monospace;">8421</strong></div>
+                  </div>
+
+                  <div style="display:flex; gap:8px; justify-content:flex-end; margin-top:4px;">
+                    <button class="btn btn-warning btn-sm" onclick="executeGateCheck('stu_101', 'outside')">
+                      🚪 Confirm Gate Exit
+                    </button>
+                    <button class="btn btn-success btn-sm" onclick="executeGateCheck('stu_101', 'inside')">
+                      🏠 Confirm Gate Entry
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Live Gate Audit Log -->
+            <div class="ui-card">
+              <div class="ui-card-header">
+                <div class="ui-card-title">Live Gate Audit Stream</div>
+                <span style="font-size:0.7rem; color:var(--text-muted);">${phase1Data.logs.length} transactions today</span>
+              </div>
+
+              <div style="display:flex; flex-direction:column; gap:8px;">
+                ${phase1Data.logs.map(l => `
+                  <div class="audit-item" style="border-left-color: ${l.type === 'CHECK_OUT' ? '#f59e0b' : '#10b981'};">
+                    <div>
+                      <div style="font-weight:700; color:#fff;">[${l.time}] ${l.name} (<span style="color:#38bdf8;">${l.bedId}</span>) — <span style="color:${l.type==='CHECK_OUT'?'#fbbf24':'#34d399'};">${l.type}</span></div>
+                      <div style="font-size:0.68rem; color:var(--text-muted);">${l.note}</div>
+                      <div style="font-size:0.65rem; color:var(--text-dim);">Auth: ${l.method}</div>
+                    </div>
+                    <span class="status-pill ${l.type==='CHECK_OUT'?'status-outside':'status-inside'}">${l.type}</span>
+                  </div>
+                `).join('')}
+              </div>
+            </div>
+          </div>
+
+          <div class="flow-next-bar">
+            <div>
+              <strong style="color:#fff; font-size:0.82rem;">Next Step in Journey:</strong>
+              <div style="font-size:0.72rem; color:var(--text-muted); margin-top:2px;">
+                See how the Admin dashboard tracks room occupancy, bed vacancies, and curfew defaulters in real-time.
+              </div>
+            </div>
+            <button class="btn btn-primary" onclick="switchView('admin_web')">
+              View Admin Room &amp; Bed Matrix ➔
+            </button>
+          </div>
+        `;
+      }
+
+      // =========================================================================
+      // SCREEN 6: WARDEN MOBILE APP
+      // =========================================================================
+      else if (currentView === "warden_app") {
+        container.innerHTML = `
+          <div class="mobile-simulator-wrapper">
+            <div class="mobile-phone-shell">
+              <div class="mobile-notch"></div>
+
+              <!-- Top Header -->
+              <div style="display:flex; justify-content:space-between; align-items:center;">
+                <div>
+                  <div style="font-size:0.65rem; color:var(--text-muted); text-transform:uppercase;">Field Operations</div>
+                  <div style="font-size:0.95rem; font-weight:800; color:#fff;">Warden Roaming App</div>
+                </div>
+                <span class="status-pill status-inside">ROUND IN PROGRESS</span>
+              </div>
+
+              <!-- Quick Search Bar (Zero Camera) -->
+              <div style="display:flex; gap:4px;">
+                <input type="text" class="form-input" style="flex:1; font-size:0.72rem;" placeholder="Search Bed ID (B-204-A) or PIN..." value="8421" />
+                <button class="btn btn-primary btn-sm" onclick="showToast('Verified Aarav Sharma for Bed B-204-A. Exit cleared.');">Clear</button>
+              </div>
+
+              <!-- Bed-by-Bed Night Floor Headcount Checklist -->
+              <div>
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+                  <div style="font-size:0.74rem; font-weight:800; color:#fff;">Night Floor Rounds (Wing B)</div>
+                  <button class="btn btn-secondary btn-sm" onclick="showToast('Headcount round saved & synced to Admin Dashboard.');">Save Round</button>
+                </div>
+                
+                <div style="display:flex; flex-direction:column; gap:6px;">
+                  <div style="background:#0c162d; border:1px solid var(--border-subtle); padding:8px 10px; border-radius:6px; font-size:0.7rem;">
+                    <div style="display:flex; justify-content:space-between; font-weight:700; color:#fff;">
+                      <span>Room B-204 (Double Sharing)</span>
+                      <span style="font-size:0.62rem; color:var(--text-dim);">Floor 2</span>
+                    </div>
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-top:4px;">
+                      <span>🛏️ Bed A: Aarav Sharma</span>
+                      <span class="status-pill status-inside">PRESENT</span>
+                    </div>
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-top:4px;">
+                      <span style="color:#64748b;">🛏️ Bed B: Vacant Bed</span>
+                      <span class="status-pill status-vacant">VACANT</span>
+                    </div>
+                  </div>
+
+                  <div style="background:#0c162d; border:1px solid var(--border-subtle); padding:8px 10px; border-radius:6px; font-size:0.7rem;">
+                    <div style="display:flex; justify-content:space-between; font-weight:700; color:#fff;">
+                      <span>Room B-108 (Double Sharing)</span>
+                      <span style="font-size:0.62rem; color:var(--text-dim);">Floor 1</span>
+                    </div>
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-top:4px;">
+                      <span>🛏️ Bed A: Rohit Verma</span>
+                      <span class="status-pill status-outside">ON PASS</span>
+                    </div>
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-top:4px;">
+                      <span style="color:#64748b;">🛏️ Bed B: Vacant Bed</span>
+                      <span class="status-pill status-vacant">VACANT</span>
+                    </div>
+                  </div>
+
+                  <div style="background:#0c162d; border:1px solid rgba(239,68,68,0.3); padding:8px 10px; border-radius:6px; font-size:0.7rem;">
+                    <div style="display:flex; justify-content:space-between; font-weight:700; color:#fff;">
+                      <span>Room A-301 (Double Sharing)</span>
+                      <span style="font-size:0.62rem; color:#f87171;">Defaulter Flag</span>
+                    </div>
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-top:4px;">
+                      <span>🛏️ Bed A: Vikram Malhotra</span>
+                      <span class="status-pill status-defaulter">LATE</span>
+                    </div>
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-top:4px;">
+                      <span>🛏️ Bed B: Kabir Sen</span>
+                      <span class="status-pill status-outside">OUTSIDE</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Quick Incident Logger -->
+              <div style="background:#0c162d; border:1px solid var(--border-subtle); padding:10px; border-radius:8px;">
+                <div style="font-size:0.7rem; font-weight:700; color:#fff; margin-bottom:4px;">Quick Roaming Incident Log:</div>
+                <div style="display:flex; gap:6px;">
+                  <input type="text" class="form-input" style="flex:1; font-size:0.7rem;" placeholder="e.g. Bed B-101-C light switch repaired" />
+                  <button class="btn btn-primary btn-sm" onclick="showToast('Incident logged to central ledger.');">Log</button>
+                </div>
+              </div>
+
+              <div style="text-align:center; font-size:0.62rem; color:var(--text-dim);">
+                HostelSafe Mobile Companion • Zero Camera Dependency
+              </div>
+            </div>
+          </div>
+        `;
+      }
+
+      // =========================================================================
+      // SCREEN 7: ADMIN WEBSITE DASHBOARD
       // =========================================================================
       else if (currentView === "admin_web") {
         container.innerHTML = `
@@ -1280,9 +1802,9 @@
               <div>
                 <div class="ui-card-title">
                   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
-                  Admin Master Website Dashboard (Multi-Bed Architecture)
+                  Step 6: Admin Master Web Dashboard (Multi-Bed Architecture)
                 </div>
-                <div style="font-size:0.72rem; color:var(--text-muted); margin-top:2px;">
+                <div style="font-size:0.75rem; color:var(--text-muted); margin-top:2px;">
                   Multi-bed room sharing inventory, vacancy tracking, dues ledger, and compliance governance.
                 </div>
               </div>
@@ -1439,7 +1961,7 @@
       }
 
       // =========================================================================
-      // SCREEN 4: ADMIN MOBILE APP
+      // SCREEN 8: ADMIN MOBILE APP
       // =========================================================================
       else if (currentView === "admin_app") {
         container.innerHTML = `
@@ -1512,366 +2034,6 @@
               <div style="text-align:center; font-size:0.62rem; color:var(--text-dim); margin-top:4px;">
                 HostelSafe Mobile Executive Console • Zero Hardware Needed
               </div>
-            </div>
-          </div>
-        `;
-      }
-
-      // =========================================================================
-      // SCREEN 5: WARDEN WEBSITE GATE STATION
-      // =========================================================================
-      else if (currentView === "warden_web") {
-        container.innerHTML = `
-          <div class="ui-card">
-            <div class="ui-card-header">
-              <div>
-                <div class="ui-card-title">
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-                  Warden Front-Desk Station (Digital PIN &amp; Bed Search)
-                </div>
-                <div style="font-size:0.72rem; color:var(--text-muted);">
-                  Zero camera scanning required. Clearance by 4-Digit Pass PIN, Student Roll No, or Bed ID.
-                </div>
-              </div>
-              <div style="display:flex; gap:6px;">
-                <span class="status-pill status-inside">STATION ACTIVE</span>
-                <span class="status-pill status-outside">CURFEW: 20:30</span>
-              </div>
-            </div>
-          </div>
-
-          <div style="display:grid; grid-template-columns: 1.1fr 1fr; gap:16px;">
-            <!-- Fast Clearance Search Desk -->
-            <div class="ui-card">
-              <div class="ui-card-header">
-                <div class="ui-card-title">Gate Clearance Desk</div>
-                <span style="font-size:0.68rem; color:#38bdf8;">Non-QR Digital Verification</span>
-              </div>
-
-              <div style="display:flex; gap:6px;">
-                <input type="text" id="gateSearchInput" class="form-input" style="flex:1; font-size:0.85rem;" placeholder="Search Roll No, Bed ID (e.g. B-204-A), or PIN (e.g. 8421)" value="CS2026-042" />
-                <button class="btn btn-primary" onclick="searchGateResident()">Verify</button>
-              </div>
-
-              <!-- Quick Demo Lookup Pills -->
-              <div style="display:flex; gap:6px; flex-wrap:wrap; font-size:0.68rem; align-items:center;">
-                <span style="color:var(--text-dim);">Quick test:</span>
-                <button class="btn btn-secondary btn-sm" onclick="quickFillGateSearch('8421')">PIN: 8421 (Aarav)</button>
-                <button class="btn btn-secondary btn-sm" onclick="quickFillGateSearch('B-108-A')">Bed: B-108-A (Rohit)</button>
-                <button class="btn btn-secondary btn-sm" onclick="quickFillGateSearch('EC2026-015')">Roll: EC2026-015 (Vikram)</button>
-              </div>
-
-              <!-- Verification Result Card -->
-              <div id="gateSearchResultCard" style="margin-top:6px;">
-                <div style="background:#091224; border:1px solid #3b82f6; border-radius:10px; padding:16px; display:flex; flex-direction:column; gap:10px;">
-                  <div style="display:flex; justify-content:space-between; align-items:flex-start;">
-                    <div>
-                      <div style="font-size:1.05rem; font-weight:800; color:#fff;">Aarav Sharma</div>
-                      <div style="font-size:0.75rem; color:var(--text-muted); margin-top:2px;">
-                        Roll: <span style="font-family:'JetBrains Mono', monospace; color:#60a5fa;">CS2026-042</span> • Allocated Bed: <strong style="color:#34d399;">Bed B-204-A</strong> (Double Sharing)
-                      </div>
-                    </div>
-                    <span class="status-pill status-inside">INSIDE PREMISES</span>
-                  </div>
-
-                  <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap:8px; background:#070d19; padding:8px 12px; border-radius:6px; font-size:0.72rem;">
-                    <div><span style="color:var(--text-dim);">Room:</span> <strong style="color:#fff;">B-204</strong></div>
-                    <div><span style="color:var(--text-dim);">Curfew:</span> <strong style="color:#fbbf24;">20:30 Tonight</strong></div>
-                    <div><span style="color:var(--text-dim);">Security PIN:</span> <strong style="color:#38bdf8; font-family:'JetBrains Mono', monospace;">8421</strong></div>
-                  </div>
-
-                  <div style="display:flex; gap:8px; justify-content:flex-end; margin-top:4px;">
-                    <button class="btn btn-warning btn-sm" onclick="executeGateCheck('stu_101', 'outside')">
-                      🚪 Confirm Gate Exit
-                    </button>
-                    <button class="btn btn-success btn-sm" onclick="executeGateCheck('stu_101', 'inside')">
-                      🏠 Confirm Gate Entry
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Live Gate Audit Log -->
-            <div class="ui-card">
-              <div class="ui-card-header">
-                <div class="ui-card-title">Live Gate Audit Stream</div>
-                <span style="font-size:0.7rem; color:var(--text-muted);">${phase1Data.logs.length} transactions today</span>
-              </div>
-
-              <div style="display:flex; flex-direction:column; gap:8px;">
-                ${phase1Data.logs.map(l => `
-                  <div class="audit-item" style="border-left-color: ${l.type === 'CHECK_OUT' ? '#f59e0b' : '#10b981'};">
-                    <div>
-                      <div style="font-weight:700; color:#fff;">[${l.time}] ${l.name} (<span style="color:#38bdf8;">${l.bedId}</span>) — <span style="color:${l.type==='CHECK_OUT'?'#fbbf24':'#34d399'};">${l.type}</span></div>
-                      <div style="font-size:0.68rem; color:var(--text-muted);">${l.note}</div>
-                      <div style="font-size:0.65rem; color:var(--text-dim);">Auth: ${l.method}</div>
-                    </div>
-                    <span class="status-pill ${l.type==='CHECK_OUT'?'status-outside':'status-inside'}">${l.type}</span>
-                  </div>
-                `).join('')}
-              </div>
-            </div>
-          </div>
-        `;
-      }
-
-      // =========================================================================
-      // SCREEN 6: WARDEN MOBILE APP
-      // =========================================================================
-      else if (currentView === "warden_app") {
-        container.innerHTML = `
-          <div class="mobile-simulator-wrapper">
-            <div class="mobile-phone-shell">
-              <div class="mobile-notch"></div>
-
-              <!-- Top Header -->
-              <div style="display:flex; justify-content:space-between; align-items:center;">
-                <div>
-                  <div style="font-size:0.65rem; color:var(--text-muted); text-transform:uppercase;">Field Operations</div>
-                  <div style="font-size:0.95rem; font-weight:800; color:#fff;">Warden Roaming App</div>
-                </div>
-                <span class="status-pill status-inside">ROUND IN PROGRESS</span>
-              </div>
-
-              <!-- Quick Search Bar (Zero Camera) -->
-              <div style="display:flex; gap:4px;">
-                <input type="text" class="form-input" style="flex:1; font-size:0.72rem;" placeholder="Search Bed ID (B-204-A) or PIN..." value="8421" />
-                <button class="btn btn-primary btn-sm" onclick="showToast('Verified Aarav Sharma for Bed B-204-A. Exit cleared.');">Clear</button>
-              </div>
-
-              <!-- Bed-by-Bed Night Floor Headcount Checklist -->
-              <div>
-                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
-                  <div style="font-size:0.74rem; font-weight:800; color:#fff;">Night Floor Rounds (Wing B)</div>
-                  <button class="btn btn-secondary btn-sm" onclick="showToast('Headcount round saved & synced to Admin Dashboard.');">Save Round</button>
-                </div>
-                
-                <div style="display:flex; flex-direction:column; gap:6px;">
-                  <div style="background:#0c162d; border:1px solid var(--border-subtle); padding:8px 10px; border-radius:6px; font-size:0.7rem;">
-                    <div style="display:flex; justify-content:space-between; font-weight:700; color:#fff;">
-                      <span>Room B-204 (Double Sharing)</span>
-                      <span style="font-size:0.62rem; color:var(--text-dim);">Floor 2</span>
-                    </div>
-                    <div style="display:flex; justify-content:space-between; align-items:center; margin-top:4px;">
-                      <span>🛏️ Bed A: Aarav Sharma</span>
-                      <span class="status-pill status-inside">PRESENT</span>
-                    </div>
-                    <div style="display:flex; justify-content:space-between; align-items:center; margin-top:4px;">
-                      <span style="color:#64748b;">🛏️ Bed B: Vacant Bed</span>
-                      <span class="status-pill status-vacant">VACANT</span>
-                    </div>
-                  </div>
-
-                  <div style="background:#0c162d; border:1px solid var(--border-subtle); padding:8px 10px; border-radius:6px; font-size:0.7rem;">
-                    <div style="display:flex; justify-content:space-between; font-weight:700; color:#fff;">
-                      <span>Room B-108 (Double Sharing)</span>
-                      <span style="font-size:0.62rem; color:var(--text-dim);">Floor 1</span>
-                    </div>
-                    <div style="display:flex; justify-content:space-between; align-items:center; margin-top:4px;">
-                      <span>🛏️ Bed A: Rohit Verma</span>
-                      <span class="status-pill status-outside">ON PASS</span>
-                    </div>
-                    <div style="display:flex; justify-content:space-between; align-items:center; margin-top:4px;">
-                      <span style="color:#64748b;">🛏️ Bed B: Vacant Bed</span>
-                      <span class="status-pill status-vacant">VACANT</span>
-                    </div>
-                  </div>
-
-                  <div style="background:#0c162d; border:1px solid rgba(239,68,68,0.3); padding:8px 10px; border-radius:6px; font-size:0.7rem;">
-                    <div style="display:flex; justify-content:space-between; font-weight:700; color:#fff;">
-                      <span>Room A-301 (Double Sharing)</span>
-                      <span style="font-size:0.62rem; color:#f87171;">Defaulter Flag</span>
-                    </div>
-                    <div style="display:flex; justify-content:space-between; align-items:center; margin-top:4px;">
-                      <span>🛏️ Bed A: Vikram Malhotra</span>
-                      <span class="status-pill status-defaulter">LATE</span>
-                    </div>
-                    <div style="display:flex; justify-content:space-between; align-items:center; margin-top:4px;">
-                      <span>🛏️ Bed B: Kabir Sen</span>
-                      <span class="status-pill status-outside">OUTSIDE</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <!-- Quick Incident Logger -->
-              <div style="background:#0c162d; border:1px solid var(--border-subtle); padding:10px; border-radius:8px;">
-                <div style="font-size:0.7rem; font-weight:700; color:#fff; margin-bottom:4px;">Quick Roaming Incident Log:</div>
-                <div style="display:flex; gap:6px;">
-                  <input type="text" class="form-input" style="flex:1; font-size:0.7rem;" placeholder="e.g. Bed B-101-C light switch repaired" />
-                  <button class="btn btn-primary btn-sm" onclick="showToast('Incident logged to central ledger.');">Log</button>
-                </div>
-              </div>
-
-              <div style="text-align:center; font-size:0.62rem; color:var(--text-dim);">
-                HostelSafe Mobile Companion • Zero Camera Dependency
-              </div>
-            </div>
-          </div>
-        `;
-      }
-
-      // =========================================================================
-      // SCREEN 7: RESIDENT DIGITAL PASSCARD
-      // =========================================================================
-      else if (currentView === "resident") {
-        container.innerHTML = `
-          <div style="display:grid; grid-template-columns: 1fr 1fr; gap:16px;">
-            <!-- Non-QR Digital Passcard -->
-            <div class="ui-card">
-              <div class="ui-card-header">
-                <div class="ui-card-title">
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-                  Active Digital Gate Passcard (Non-QR)
-                </div>
-                <span class="status-pill status-inside">ACTIVE PASS</span>
-              </div>
-
-              <div class="pass-card-box">
-                <div style="display:flex; justify-content:space-between; align-items:flex-start;">
-                  <div>
-                    <div style="font-size:1.15rem; font-weight:800; color:#fff;">Aarav Sharma</div>
-                    <div style="font-size:0.72rem; color:var(--text-muted); margin-top:2px;">
-                      Roll: <span style="font-family:'JetBrains Mono', monospace; color:#60a5fa;">CS2026-042</span>
-                    </div>
-                  </div>
-                  <div style="text-align:right;">
-                    <div style="font-size:0.65rem; color:var(--text-dim); text-transform:uppercase;">Allocated Bed</div>
-                    <strong style="color:#34d399; font-size:0.85rem;">Bed B-204-A</strong>
-                    <div style="font-size:0.65rem; color:var(--text-muted);">Double Sharing</div>
-                  </div>
-                </div>
-
-                <!-- 4-Digit Live PIN Block -->
-                <div class="gate-pin-badge">
-                  <div style="font-size:0.65rem; color:var(--text-muted); text-transform:uppercase; letter-spacing:1px;">
-                    State this 4-Digit PIN to Warden at Gate
-                  </div>
-                  <div class="gate-pin-number">8421</div>
-                  <div style="font-size:0.65rem; color:#38bdf8; display:flex; align-items:center; gap:4px;">
-                    <span>⏱ Security PIN rotates in:</span>
-                    <strong id="pinTimerVal" style="color:#fbbf24;">${pinRefreshSecs}s</strong>
-                  </div>
-                </div>
-
-                <div style="background:#070d18; padding:10px 12px; border-radius:6px; font-size:0.72rem; display:flex; justify-content:space-between;">
-                  <div><span style="color:var(--text-dim);">Outing Type:</span> <strong style="color:#fff;">Day Outing</strong></div>
-                  <div><span style="color:var(--text-dim);">Return Curfew:</span> <strong style="color:#fbbf24;">20:30 Tonight</strong></div>
-                </div>
-
-                <div style="font-size:0.68rem; color:var(--text-dim); text-align:center;">
-                  Zero Camera Needed &bull; No QR Code &bull; State your Roll No or PIN at the gate desk.
-                </div>
-              </div>
-            </div>
-
-            <!-- Apply Pass Form -->
-            <div class="ui-card">
-              <div class="ui-card-header">
-                <div class="ui-card-title">Apply Outing / Day Pass</div>
-                <span style="font-size:0.7rem; color:#fbbf24;">Evening Curfew: 20:30</span>
-              </div>
-
-              <div class="form-group">
-                <label class="form-label">Outing Type</label>
-                <select class="form-select">
-                  <option>Day Outing (City Limits - Return by 20:30)</option>
-                  <option>Late Night Pass (Requires Parent In-App SMS OTP Approval)</option>
-                  <option>Weekend Overnight Leave</option>
-                </select>
-              </div>
-
-              <div class="form-group">
-                <label class="form-label">Destination</label>
-                <input type="text" class="form-input" value="Central University Science Library" />
-              </div>
-
-              <div style="display:grid; grid-template-columns: 1fr 1fr; gap:8px;">
-                <div class="form-group">
-                  <label class="form-label">Expected Departure</label>
-                  <input type="time" class="form-input" value="16:00" />
-                </div>
-                <div class="form-group">
-                  <label class="form-label">Expected Return</label>
-                  <input type="time" class="form-input" value="20:00" />
-                </div>
-              </div>
-
-              <button class="btn btn-primary" onclick="showToast('Outing Pass request submitted! Guardian will receive In-App authorization alert.');">
-                Submit Outing Request
-              </button>
-
-              <div style="background:#090f1f; border:1px solid var(--border-subtle); padding:10px; border-radius:6px; font-size:0.72rem; color:var(--text-muted); margin-top:8px;">
-                <strong style="color:#34d399;">Bed-Bound Notice:</strong> Your pass is tied directly to Bed B-204-A. Roommates in Bed B-204-B maintain separate ledger and curfew status.
-              </div>
-            </div>
-          </div>
-        `;
-      }
-
-      // =========================================================================
-      // SCREEN 8: PARENT GUARDIAN APP
-      // =========================================================================
-      else if (currentView === "parent") {
-        container.innerHTML = `
-          <div class="ui-card">
-            <div class="ui-card-header">
-              <div>
-                <div class="ui-card-title">Parent Guardian Portal (Multi-Child Cross-City)</div>
-                <div style="font-size:0.72rem; color:var(--text-muted);">Guardian: Rajesh Sharma (Phone: +91 98110 99881) • In-App Safety Tracking</div>
-              </div>
-              <span class="saas-pill">2 WARDS REGISTERED</span>
-            </div>
-
-            <!-- Cross-City Ward Cards with Bed Details -->
-            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:12px; margin-top:8px;">
-              <div style="background:#090f1f; border:1px solid var(--border-strong); border-radius:var(--radius-md); padding:12px;">
-                <div style="display:flex; justify-content:space-between;">
-                  <strong style="color:#fff;">Aarav Sharma</strong>
-                  <span class="status-pill status-inside">INSIDE HOSTEL</span>
-                </div>
-                <div style="font-size:0.7rem; color:var(--text-muted); margin:4px 0;">
-                  📍 Shivalik North Campus • Delhi NCR • <strong style="color:#38bdf8;">Bed B-204-A</strong>
-                </div>
-                <div style="font-size:0.68rem; color:#34d399;">✓ Safe inside hostel. Curfew tonight at 20:30.</div>
-              </div>
-
-              <div style="background:#090f1f; border:1px solid #f59e0b; border-radius:var(--radius-md); padding:12px;">
-                <div style="display:flex; justify-content:space-between;">
-                  <strong style="color:#fff;">Ananya Sharma</strong>
-                  <span class="status-pill status-outside">OUTING PENDING APPROVAL</span>
-                </div>
-                <div style="font-size:0.7rem; color:var(--text-muted); margin:4px 0;">
-                  📍 Aravalli Tech Park • Bengaluru • <strong style="color:#fbbf24;">Bed W1-305-B</strong>
-                </div>
-                <div style="font-size:0.68rem; color:#fbbf24;">⚡ Weekend Leave requested for IISC Tech Symposium.</div>
-              </div>
-            </div>
-
-            <!-- Outing Pass Queue -->
-            <div style="margin-top:12px;">
-              <div style="font-size:0.78rem; font-weight:800; color:#fff; margin-bottom:8px;">
-                Pending Outing Pass Requests (In-App SMS OTP Endorsement)
-              </div>
-              ${phase1Data.pendingParentPasses.length === 0 ? `
-                <div style="padding:16px; background:#090f1f; border-radius:6px; font-size:0.75rem; color:var(--text-dim); text-align:center;">
-                  No pending pass requests. All wards currently accounted for.
-                </div>
-              ` : phase1Data.pendingParentPasses.map(p => `
-                <div style="background:#091222; border:1px solid rgba(245,158,11,0.3); border-radius:var(--radius-sm); padding:12px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
-                  <div>
-                    <div style="font-weight:700; color:#fff;">${p.studentName} — ${p.type} (${p.city})</div>
-                    <div style="font-size:0.7rem; color:var(--text-muted);">Allocated Bed: <strong style="color:#38bdf8;">${p.bedId}</strong> • Destination: ${p.destination} • Return: ${p.returnExpected}</div>
-                  </div>
-                  <div style="display:flex; gap:6px;">
-                    <button class="btn btn-danger btn-sm" onclick="showToast('Outing Pass Denied.');">Deny</button>
-                    <button class="btn btn-success btn-sm" onclick="openParentOtpModal('${p.id}')">
-                      Verify SMS OTP &amp; Approve In-App
-                    </button>
-                  </div>
-                </div>
-              `).join('')}
             </div>
           </div>
         `;
@@ -1952,7 +2114,7 @@
       }
     }
 
-    // Initialize on load
+    // Initialize on load with Step 1 of the journey
     render();
   </script>
 </body>
