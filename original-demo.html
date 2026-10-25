@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Hostel Gate & Rent Management Suite</title>
+<style>
+  :root {
+    --bg-main: #0b1120;
+    --card-bg: #1e293b;
+    --border-color: #334155;
+    --accent: #3b82f6;
+    --accent-hover: #2563eb;
+    --success: #10b981;
+    --warning: #f59e0b;
+    --danger: #ef4444;
+    --text-main: #f8fafc;
+    --text-muted: #94a3b8;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+  body { background: var(--bg-main); color: var(--text-main); display: flex; flex-direction: column; align-items: center; min-height: 100vh; overflow-x: hidden; }
+
+  header { width: 100%; background: #0f172a; padding: 10px 16px; border-bottom: 1px solid var(--border-color); display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 8px; z-index: 100; }
+  .logo { font-size: 0.95rem; font-weight: 700; color: #60a5fa; display: flex; align-items: center; gap: 6px; }
+  .role-nav { display: flex; gap: 6px; flex-wrap: wrap; }
+  .role-btn { background: #1e293b; color: var(--text-muted); border: 1px solid var(--border-color); padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 0.78rem; font-weight: 600; transition: all 0.2s; }
+  .role-btn.active { background: var(--accent); color: white; border-color: var(--accent); box-shadow: 0 0 10px rgba(59, 130, 246, 0.4); }
+  .cron-btn { background: #334155; color: #fbbf24; border: 1px solid #d97706; padding: 6px 10px; border-radius: 6px; cursor: pointer; font-size: 0.75rem; font-weight: 600; }
+  .cron-btn:hover { background: #451a03; }
+
+  .device-wrapper { margin: 16px 0; display: flex; justify-content: center; width: 100%; padding: 0 10px; }
+  .phone-frame { width: 100%; max-width: 390px; height: 740px; background: #000; border: 10px solid #1e293b; border-radius: 36px; box-shadow: 0 20px 40px rgba(0,0,0,0.8); overflow: hidden; display: flex; flex-direction: column; position: relative; }
+  .tablet-frame { width: 100%; max-width: 760px; height: 750px; background: #000; border: 12px solid #1e293b; border-radius: 28px; box-shadow: 0 20px 40px rgba(0,0,0,0.8); overflow: hidden; display: flex; flex-direction: column; position: relative; }
+
+  .app-screen { flex: 1; background: #0b1120; overflow-y: auto; display: flex; flex-direction: column; }
+  .app-header { background: #111827; padding: 14px 16px; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 10; }
+  .app-title { font-size: 0.95rem; font-weight: 700; color: #fff; }
+  .badge { font-size: 0.7rem; padding: 2px 8px; border-radius: 12px; font-weight: 700; text-transform: uppercase; }
+  .badge-resident { background: rgba(59, 130, 246, 0.2); color: #60a5fa; border: 1px solid #3b82f6; }
+  .badge-warden { background: rgba(16, 185, 129, 0.2); color: #34d399; border: 1px solid #10b981; }
+  .badge-parent { background: rgba(245, 158, 11, 0.2); color: #fbbf24; border: 1px solid #f59e0b; }
+  .badge-admin { background: rgba(239, 68, 68, 0.2); color: #f87171; border: 1px solid #ef4444; }
+
+  .content { padding: 14px; display: flex; flex-direction: column; gap: 12px; }
+  .card { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 12px; padding: 12px; display: flex; flex-direction: column; gap: 8px; }
+  .card-title { font-size: 0.85rem; font-weight: 600; color: #cbd5e1; display: flex; justify-content: space-between; align-items: center; }
+  .status-pill { padding: 2px 7px; border-radius: 6px; font-size: 0.72rem; font-weight: 600; }
+  .status-inside { background: #064e3b; color: #6ee7b7; }
+  .status-outside { background: #78350f; color: #fde68a; }
+  .status-overdue { background: #7f1d1d; color: #fca5a5; animation: pulse 1.5s infinite; }
+  .status-approved { background: #1e3a8a; color: #93c5fd; }
+  .status-pending { background: #374151; color: #d1d5db; }
+
+  @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
+
+  label { font-size: 0.75rem; font-weight: 600; color: var(--text-muted); display: block; margin-bottom: 3px; }
+  input, select, textarea { width: 100%; background: #0f172a; border: 1px solid var(--border-color); border-radius: 6px; padding: 8px 10px; color: #fff; font-size: 0.82rem; outline: none; }
+  input:focus, select:focus, textarea:focus { border-color: var(--accent); }
+
+  .btn { background: var(--accent); color: white; border: none; padding: 8px 12px; border-radius: 6px; font-size: 0.8rem; font-weight: 600; cursor: pointer; display: flex; justify-content: center; align-items: center; gap: 5px; transition: 0.2s; }
+  .btn:hover { background: var(--accent-hover); }
+  .btn-success { background: #059669; }
+  .btn-success:hover { background: #047857; }
+  .btn-danger { background: #dc2626; }
+  .btn-danger:hover { background: #b91c1c; }
+  .btn-outline { background: transparent; border: 1px solid var(--border-color); color: #cbd5e1; }
+  .btn-outline:hover { background: #334155; }
+  .btn-sm { padding: 5px 8px; font-size: 0.72rem; }
+
+  .biometric-box { border: 2px dashed #475569; background: #0f172a; border-radius: 12px; padding: 18px; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 8px; cursor: pointer; transition: 0.2s; }
+  .biometric-box:hover { border-color: #38bdf8; background: #172554; }
+  .fingerprint-icon { width: 54px; height: 54px; stroke: #38bdf8; fill: none; stroke-width: 2; stroke-linecap: round; }
+  .biometric-box.scanning { animation: scanGlow 1s infinite alternate; }
+  @keyframes scanGlow { from { border-color: #38bdf8; box-shadow: 0 0 10px #38bdf8; } to { border-color: #10b981; box-shadow: 0 0 20px #10b981; } }
+
+  .tab-row { display: flex; background: #111827; border-bottom: 1px solid var(--border-color); }
+  .tab-item { flex: 1; text-align: center; padding: 9px 5px; font-size: 0.75rem; font-weight: 600; color: var(--text-muted); cursor: pointer; }
+  .tab-item.active { color: #60a5fa; border-bottom: 2px solid #60a5fa; background: rgba(59, 130, 246, 0.08); }
+
+  .toast { position: absolute; bottom: 12px; left: 12px; right: 12px; background: #1e293b; border-left: 4px solid var(--accent); padding: 10px; border-radius: 6px; font-size: 0.75rem; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.5); transform: translateY(150%); transition: 0.3s ease; z-index: 100; }
+  .toast.show { transform: translateY(0); }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">
+    <span>🛡️ HostelGuard 360</span>
+    <span style="font-size:0.7rem; color:#94a3b8; font-weight:400;">(Biometric Gate Engine • No QR)</span>
+  </div>
+  <div class="role-nav">
+    <button class="role-btn active" onclick="switchApp('resident')">1. Resident</button>
+    <button class="role-btn" onclick="switchApp('warden')">2. Warden Kiosk</button>
+    <button class="role-btn" onclick="switchApp('parent')">3. Parent</button>
+    <button class="role-btn" onclick="switchApp('admin')">4. Admin</button>
+    <button class="cron-btn" onclick="runOverdueCron()">⏱️ Trigger Overdue Cron</button>
+  </div>
+</header>
+
+<div class="device-wrapper">
+  <div id="deviceFrame" class="phone-frame">
+    <div id="appContainer" class="app-screen"></div>
+    <div id="appToast" class="toast">
+      <span id="toastMsg">Action recorded</span>
+    </div>
+  </div>
+</div>
+
+<script>
+const db = {
+  hostel: { name: "Shivalik Boys Hostel", wing: "Block B" },
+  students: [
+    {
+      uid: "stu_101",
+      name: "Aarav Sharma",
+      rollNo: "CS2026-042",
+      room: "B-204",
+      fingerprintId: "FP_AARAV_042",
+      status: "inside",
+      rentDue: 6500,
+      rentStatus: "unpaid",
+      dueDate: "2026-10-15"
+    },
+    {
+      uid: "stu_102",
+      name: "Rohit Verma",
+      rollNo: "ME2026-018",
+      room: "B-108",
+      fingerprintId: "FP_ROHIT_018",
+      status: "outside",
+      rentDue: 0,
+      rentStatus: "paid",
+      dueDate: "2026-10-15"
+    }
+  ],
+  passes: [
+    {
+      id: "pass_901",
+      studentUid: "stu_101",
+      studentName: "Aarav Sharma",
+      room: "B-204",
+      type: "late_night",
+      destination: "Central Library & Dinner",
+      returnExpected: "21:30",
+      reason: "Exam group study",
+      parentConsent: "pending",
+      wardenStatus: "pending",
+      state: "draft"
+    },
+    {
+      id: "pass_902",
+      studentUid: "stu_102",
+      studentName: "Rohit Verma",
+      room: "B-108",
+      type: "day_out",
+      destination: "Medical Store",
+      returnExpected: "19:00",
+      reason: "Medicines",
+      parentConsent: "bypassed",
+      wardenStatus: "approved",
+      state: "outside"
+    }
+  ],
+  logs: [
+    { id: 1, time: "16:15", text: "Rohit Verma verified by Biometric Fingerprint - Exited via Gate 1." }
+  ]
+};
+
+let currentApp = 'resident';
+let residentTab = 'pass';
+let wardenTab = 'gate';
+
+function toast(msg) {
+  const t = document.getElementById('appToast');
+  document.getElementById('toastMsg').innerText = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2800);
+}
+
+function switchApp(app) {
+  currentApp = app;
+  document.querySelectorAll('.role-nav .role-btn').forEach(btn => btn.classList.remove('active'));
+  const idx = ['resident', 'warden', 'parent', 'admin'].indexOf(app);
+  document.querySelectorAll('.role-nav .role-btn')[idx].classList.add('active');
+
+  const frame = document.getElementById('deviceFrame');
+  frame.className = (app === 'warden' || app === 'admin') ? 'tablet-frame' : 'phone-frame';
+  render();
+}
+
+function runOverdueCron() {
+  let count = 0;
+  db.passes.forEach(p => {
+    if (p.state === 'outside') {
+      p.state = 'overdue';
+      const student = db.students.find(s => s.uid === p.studentUid);
+      if (student) student.status = 'overdue';
+      db.logs.unshift({
+        id: Date.now(),
+        time: "Now",
+        text: `⚠️ OVERDUE ALERT: ${p.studentName} (${p.room}) missed return curfew (${p.returnExpected}). Alerts sent!`
+      });
+      count++;
+    }
+  });
+  toast(count > 0 ? `Alert: ${count} student marked Overdue!` : "All outside students within curfew.");
+  render();
+}
+
+function render() {
+  const c = document.getElementById('appContainer');
+  if (currentApp === 'resident') renderResidentApp(c);
+  if (currentApp === 'warden') renderWardenApp(c);
+  if (currentApp === 'parent') renderParentApp(c);
+  if (currentApp === 'admin') renderAdminApp(c);
+}
+
+// RESIDENT APP
+function renderResidentApp(container) {
+  const me = db.students[0];
+  const myPass = db.passes.find(p => p.studentUid === me.uid && p.state !== 'returned');
+
+  container.innerHTML = `
+    <div class="app-header">
+      <div>
+        <div class="app-title">${me.name}</div>
+        <div style="font-size:0.7rem; color:#94a3b8;">${me.room} • ${me.rollNo}</div>
+      </div>
+      <span class="badge badge-resident">Resident</span>
+    </div>
+
+    <div class="tab-row">
+      <div class="tab-item ${residentTab==='pass'?'active':''}" onclick="residentTab='pass';render();">Gate Pass</div>
+      <div class="tab-item ${residentTab==='rent'?'active':''}" onclick="residentTab='rent';render();">Rent Dues</div>
+    </div>
+
+    <div class="content">
+      ${residentTab === 'pass' ? `
+        <div class="card">
+          <div class="card-title">
+            <span>Gate Presence</span>
+            <span class="status-pill status-${me.status}">${me.status.toUpperCase()}</span>
+          </div>
+          <p style="font-size:0.75rem; color:#94a3b8;">
+            Hostel: <strong>${db.hostel.name}</strong>. Fingerprint sensor calibrated. No QR required at gate.
+          </p>
+        </div>
+
+        ${myPass ? `
+          <div class="card" style="border-left: 4px solid var(--accent);">
+            <div class="card-title">
+              <span>Active Outing Pass</span>
+              <span class="status-pill status-${myPass.state}">${myPass.state.toUpperCase()}</span>
+            </div>
+            <div style="font-size:0.78rem; line-height:1.5;">
+              <div><strong>Type:</strong> ${myPass.type.replace('_',' ').toUpperCase()}</div>
+              <div><strong>Destination:</strong> ${myPass.destination}</div>
+              <div><strong>Return By:</strong> ${myPass.returnExpected}</div>
+              <div><strong>Parent Consent:</strong> <span style="color:${myPass.parentConsent==='approved'?'#10b981':'#f59e0b'}">${myPass.parentConsent.toUpperCase()}</span></div>
+              <div><strong>Warden Approval:</strong> <span style="color:${myPass.wardenStatus==='approved'?'#10b981':'#f59e0b'}">${myPass.wardenStatus.toUpperCase()}</span></div>
+            </div>
+            ${myPass.state === 'approved' ? `
+              <div style="background:#022c22; border:1px solid #059669; border-radius:6px; padding:8px; font-size:0.72rem; color:#6ee7b7; text-align:center;">
+                ✅ Pass Approved! Walk to the gate and place your finger on the sensor to exit.
+              </div>
+            ` : ''}
+            ${myPass.state === 'outside' ? `
+              <div style="background:#451a03; border:1px solid #d97706; border-radius:6px; padding:8px; font-size:0.72rem; color:#fde68a; text-align:center;">
+                🏃 Currently Outside. Return by ${myPass.returnExpected} and scan finger at gate.
+              </div>
+            ` : ''}
+          </div>
+        ` : `
+          <div class="card">
+            <div class="card-title">Apply for Gate Pass</div>
+            <div>
+              <label>Outing Type</label>
+              <select id="passType">
+                <option value="day_out">Day Outing (Standard)</option>
+                <option value="late_night">Late Night (Parent Approval Required)</option>
+                <option value="vacation">Vacation / Home Visit</option>
+              </select>
+            </div>
+            <div>
+              <label>Destination</label>
+              <input id="passDest" placeholder="e.g. Library, Market" />
+            </div>
+            <div>
+              <label>Return Time</label>
+              <input id="passReturn" type="time" value="21:30" />
+            </div>
+            <button class="btn" style="margin-top:4px;" onclick="submitPassRequest()">Apply Pass</button>
+          </div>
+        `}
+      ` : `
+        <div class="card">
+          <div class="card-title">
+            <span>October 2026 Dues</span>
+            <span class="status-pill ${me.rentStatus==='paid'?'status-inside':'status-outside'}">${me.rentStatus.toUpperCase()}</span>
+          </div>
+          <div style="font-size:1.4rem; font-weight:700;">₹${me.rentDue.toLocaleString()}</div>
+          <div style="font-size:0.72rem; color:#94a3b8;">Due date: ${me.dueDate}</div>${me.rentStatus === 'unpaid' ? `
+            <button class="btn btn-success" style="margin-top:6px;" onclick="payRentOnline('stu_101')">Simulate UPI Payment</button>
+          ` : `<div style="color:#10b981; font-size:0.75rem;">✅ All fees settled for this cycle.</div>`}
+        </div>
+      `}
+    </div>
+  `;
+}
+
+function submitPassRequest() {
+  const type = document.getElementById('passType').value;
+  const dest = document.getElementById('passDest').value;
+  if (!dest) { alert("Enter destination"); return; }
+
+  db.passes.push({
+    id: "pass_" + Math.floor(Math.random()*1000),
+    studentUid: "stu_101",
+    studentName: "Aarav Sharma",
+    room: "B-204",
+    type: type,
+    destination: dest,
+    returnExpected: document.getElementById('passReturn').value,
+    parentConsent: (type === 'day_out' ? 'bypassed' : 'pending'),
+    wardenStatus: 'pending',
+    state: 'draft'
+  });
+  db.logs.unshift({ id: Date.now(), time: "Now", text: `Aarav Sharma applied for ${type.replace('_',' ')} pass.` });
+  toast("Pass application submitted!");
+  render();
+}
+
+function payRentOnline(uid) {
+  const s = db.students.find(x => x.uid === uid);
+  if (s) {
+    s.rentStatus = 'paid';
+    s.rentDue = 0;
+    db.logs.unshift({ id: Date.now(), time: "Now", text: `${s.name} cleared rent dues via UPI.` });
+    toast("Rent paid successfully!");
+    render();
+  }
+}
+
+// WARDEN APP
+function renderWardenApp(container) {
+  container.innerHTML = `
+    <div class="app-header">
+      <div>
+        <div class="app-title">Gate Kiosk Terminal</div>
+        <div style="font-size:0.7rem; color:#94a3b8;">${db.hostel.name} • Gate 1</div>
+      </div>
+      <span class="badge badge-warden">Warden Kiosk</span>
+    </div>
+
+    <div class="tab-row">
+      <div class="tab-item ${wardenTab==='gate'?'active':''}" onclick="wardenTab='gate';render();">Biometric Scanner</div>
+      <div class="tab-item ${wardenTab==='approvals'?'active':''}" onclick="wardenTab='approvals';render();">Approvals Queue</div>
+      <div class="tab-item ${wardenTab==='roster'?'active':''}" onclick="wardenTab='roster';render();">Live Roster</div>
+    </div>
+
+    <div class="content">
+      ${wardenTab === 'gate' ? `
+        <div class="card" style="text-align:center;">
+          <div class="card-title"><span>Biometric Sensor (Mantra USB OTG)</span></div>
+          <div class="biometric-box" id="bioBox" onclick="simulateBiometricScan()">
+            <svg class="fingerprint-icon" viewBox="0 0 24 24">
+              <path d="M12 2a10 10 0 0 0-8 6.2c-.3.7 0 1.5.7 1.8.7.3 1.5 0 1.8-.7A8 8 0 0 1 12 4a8 8 0 0 1 5.5 2.3c.6.5 1.5.5 2-.1.5-.6.5-1.5-.1-2A10 10 0 0 0 12 2z"></path>
+              <path d="M7 11a5 5 0 0 1 10 0c0 1.7-.4 3.3-1.1 4.7-.4.7-.2 1.6.5 2 .7.4 1.6.2 2-.5A12 12 0 0 0 19 11a7 7 0 0 0-14 0c0 2.2.6 4.3 1.7 6.1.4.7 1.3.9 2 .5.7-.4.9-1.3.5-2A8 8 0 0 1 7 11z"></path>
+              <path d="M12 8a3 3 0 0 0-3 3c0 2.5-.5 4.8-1.5 7-.3.7 0 1.5.7 1.8.7.3 1.5 0 1.8-.7 1.2-2.5 1.8-5.2 2-8.1A1 1 0 0 1 12 8z"></path>
+            </svg>
+            <div style="font-weight:700; font-size:0.85rem; color:#38bdf8;">TOUCH TO SIMULATE FINGERPRINT SCAN</div>
+            <div style="font-size:0.7rem; color:#94a3b8;">Verifies Aarav Sharma (Room B-204) at the gate</div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">Manual Room / Roll No Fallback</div>
+          <div style="display:flex; gap:6px;">
+            <input id="manualSearchInput" placeholder="Enter B-204 or Roll No" />
+            <button class="btn btn-outline btn-sm" onclick="performManualGateSearch()">Lookup</button>
+          </div>
+          <div id="manualResultBox" style="margin-top:6px;"></div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">Live Gate Audit Stream</div>
+          <div style="display:flex; flex-direction:column; gap:6px; max-height:140px; overflow-y:auto;">
+            ${db.logs.map(l => `
+              <div style="font-size:0.72rem; border-bottom:1px solid #334155; padding-bottom:3px; color:#cbd5e1;">
+                <span style="color:#60a5fa; font-weight:700;">[${l.time}]</span> ${l.text}
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      ` : wardenTab === 'approvals' ? `
+        <div class="card">
+          <div class="card-title">Pass Approval Queue</div>
+          ${db.passes.filter(p => p.wardenStatus === 'pending').length === 0 ? `<div style="font-size:0.75rem; color:#94a3b8;">No pending pass requests.</div>` : ''}
+          ${db.passes.filter(p => p.wardenStatus === 'pending').map(p => `
+            <div style="background:#0f172a; border:1px solid #334155; border-radius:6px; padding:10px; margin-bottom:8px;">
+              <div style="display:flex; justify-content:space-between; font-size:0.8rem;">
+                <strong>${p.studentName} (${p.room})</strong>
+                <span class="status-pill status-${p.type}">${p.type.replace('_',' ').toUpperCase()}</span>
+              </div>
+              <div style="font-size:0.72rem; color:#94a3b8; margin:5px 0;">
+                <div>Dest: ${p.destination} | Return: ${p.returnExpected}</div>
+                <div>Parent Consent: <strong style="color:${p.parentConsent==='approved'?'#10b981':'#f59e0b'}">${p.parentConsent.toUpperCase()}</strong></div>
+              </div>
+              <div style="display:flex; gap:6px; margin-top:6px;">
+                ${p.type !== 'day_out' && p.parentConsent !== 'approved' ? `
+                  <button class="btn btn-outline btn-sm" disabled style="opacity:0.5;">Awaiting Parent Consent</button>
+                ` : `
+                  <button class="btn btn-success btn-sm" onclick="wardenApprovePass('${p.id}')">Authorize Pass</button>
+                `}
+                <button class="btn btn-danger btn-sm" onclick="wardenRejectPass('${p.id}')">Reject</button>
+              </div>
+            </div>
+          `).join('')}
+        </div>
+      ` : `
+        <div class="card">
+          <div class="card-title">Wing Headcount & Roster</div>
+          <div style="display:flex; flex-direction:column; gap:6px;">
+            ${db.students.map(s => `
+              <div style="display:flex; justify-content:space-between; align-items:center; background:#0f172a; padding:8px; border-radius:6px; font-size:0.75rem;">
+                <div>
+                  <strong>${s.name} (${s.room})</strong>
+                  <div style="color:#94a3b8;">Rent: ${s.rentStatus==='paid'?'Settled':'₹'+s.rentDue+' Due'}</div>
+                </div>
+                <div style="display:flex; gap:6px; align-items:center;">
+                  <span class="status-pill status-${s.status}">${s.status.toUpperCase()}</span>
+                  ${s.rentStatus==='unpaid' ? `<button class="btn btn-sm btn-outline" onclick="sendRentReminder('${s.uid}')">Remind</button>` : ''}
+                </div>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      `}
+    </div>
+  `;
+}
+
+function wardenApprovePass(id) {
+  const p = db.passes.find(x => x.id === id);
+  if (p) {
+    p.wardenStatus = 'approved';
+    p.state = 'approved';
+    db.logs.unshift({ id: Date.now(), time: "Now", text: `Warden authorized pass for ${p.studentName}.` });
+    toast(`Pass approved for ${p.studentName}`);
+    render();
+  }
+}
+
+function wardenRejectPass(id) {
+  const p = db.passes.find(x => x.id === id);
+  if (p) {
+    p.wardenStatus = 'rejected';
+    p.state = 'draft';
+    toast("Pass rejected");
+    render();
+  }
+}
+
+function sendRentReminder(uid) {
+  const s = db.students.find(x => x.uid === uid);
+  toast(`Reminder sent to ${s.name} & Parent: Rent due ₹${s.rentDue}`);
+}
+
+function simulateBiometricScan() {
+  const box = document.getElementById('bioBox');
+  if (!box) return;
+  box.classList.add('scanning');
+  setTimeout(() => {
+    box.classList.remove('scanning');
+    processGatePassage(db.students[0], "Biometric Fingerprint");
+  }, 700);
+}
+
+function performManualGateSearch() {
+  const val = document.getElementById('manualSearchInput').value.trim().toLowerCase();
+  const found = db.students.find(s => s.room.toLowerCase() === val || s.rollNo.toLowerCase() === val || s.name.toLowerCase().includes(val));
+  const res = document.getElementById('manualResultBox');
+
+  if (!found) {
+    res.innerHTML = `<div style="color:#ef4444; font-size:0.75rem;">No student found with query "${val}".</div>`;
+    return;
+  }
+  res.innerHTML = `
+    <div style="background:#1e293b; border:1px solid #334155; padding:8px; border-radius:6px; display:flex; justify-content:space-between; align-items:center; font-size:0.75rem;">
+      <div>
+        <strong>${found.name} (${found.room})</strong>
+        <div style="color:#94a3b8;">Status: ${found.status.toUpperCase()}</div>
+      </div>
+      <button class="btn btn-sm btn-success" onclick="processGatePassage(db.students.find(s=>s.uid==='${found.uid}'), 'Manual Roll No')">Process Gate</button>
+    </div>
+  `;
+}
+
+function processGatePassage(student, method) {
+  const activePass = db.passes.find(p => p.studentUid === student.uid && (p.state === 'approved' || p.state === 'outside' || p.state === 'overdue'));
+
+  if (!activePass) {
+    alert(`⛔ GATE ACCESS DENIED: No approved pass on record for ${student.name} (${student.room}).`);
+    db.logs.unshift({ id: Date.now(), time: "Now", text: `⛔ DENIED: ${student.name} attempted exit without approved pass.` });
+    render();
+    return;
+  }
+
+  if (student.status === 'inside' && activePass.state === 'approved') {
+    student.status = 'outside';
+    activePass.state = 'outside';
+    const t = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+    db.logs.unshift({ id: Date.now(), time: t, text: `🚪 CHECK-OUT: ${student.name} exited gate via ${method}. Parent notified.` });
+    toast(`CHECK-OUT: ${student.name} exited.`);
+  } else if (student.status === 'outside' || student.status === 'overdue') {
+    student.status = 'inside';
+    activePass.state = 'returned';
+    const t = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+    db.logs.unshift({ id: Date.now(), time: t, text: `🏡 CHECK-IN: ${student.name} safely returned via ${method}. Parent notified.` });
+    toast(`CHECK-IN: ${student.name} inside.`);
+  }
+  render();
+}
+
+// PARENT APP
+function renderParentApp(container) {
+  const myWard = db.students[0];
+  const pendingConsents = db.passes.filter(p => p.studentUid === myWard.uid && p.parentConsent === 'pending');
+
+  container.innerHTML = `
+    <div class="app-header">
+      <div>
+        <div class="app-title">Parent Guardian Portal</div>
+        <div style="font-size:0.7rem; color:#94a3b8;">Child: ${myWard.name} (${myWard.room})</div>
+      </div>
+      <span class="badge badge-parent">Parent</span>
+    </div>
+
+    <div class="content">
+      <div class="card" style="border-left:4px solid ${myWard.status==='inside'?'#10b981':(myWard.status==='outside'?'#f59e0b':'#ef4444')};">
+        <div class="card-title">
+          <span>Child Gate Status</span>
+          <span class="status-pill status-${myWard.status}">${myWard.status.toUpperCase()}</span>
+        </div>
+        <div style="font-size:0.75rem; color:#cbd5e1;">
+          ${myWard.status === 'inside' ? '✅ Aarav is currently inside the hostel premises.' : myWard.status === 'outside' ? '⚠️ Aarav is currently outside on an approved pass.' : '🚨 CURFEW ALERT: Aarav is overdue! Contact warden.'}
+        </div>
+      </div>
+
+      ${pendingConsents.length > 0 ? `
+        <div class="card" style="border:1px solid #f59e0b; background:#1c1917;">
+          <div class="card-title" style="color:#fbbf24;">Action Required: Outing Consent</div>
+          ${pendingConsents.map(p => `
+            <div style="font-size:0.75rem;">
+              <p>Aarav requested <strong>${p.type.replace('_',' ').toUpperCase()}</strong>.</p>
+              <div style="margin:6px 0; background:#292524; padding:6px; border-radius:4px;">
+                <div>Dest: ${p.destination} | Return: ${p.returnExpected}</div>
+              </div>
+              <div style="display:flex; gap:6px;">
+                <button class="btn btn-success btn-sm" onclick="grantParentConsent('${p.id}')">Approve Outing</button>
+                <button class="btn btn-danger btn-sm" onclick="rejectParentConsent('${p.id}')">Deny</button>
+              </div>
+            </div>
+          `).join('')}
+        </div>
+      ` : ''}
+
+      <div class="card">
+        <div class="card-title">Gate Movement Audit Log</div>
+        <div style="display:flex; flex-direction:column; gap:6px;">
+          ${db.logs.slice(0, 3).map(l => `
+            <div style="font-size:0.72rem; border-left:2px solid #3b82f6; padding-left:6px; color:#cbd5e1;">
+              <span style="color:#60a5fa;">${l.time}</span> •${l.text}
+            </div>
+          `).join('')}
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Hostel Fee Oversight</div>
+        <div style="font-size:0.8rem; display:flex; justify-content:space-between;">
+          <span>Current Cycle Dues:</span>
+          <strong>${myWard.rentStatus === 'paid' ? 'Settled' : '₹' + myWard.rentDue + ' Due'}</strong>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function grantParentConsent(id) {
+  const p = db.passes.find(x => x.id === id);
+  if (p) {
+    p.parentConsent = 'approved';
+    db.logs.unshift({ id: Date.now(), time: "Now", text: `Parent granted digital consent for ${p.studentName}.` });
+    toast("Consent granted. Forwarded to Warden.");
+    render();
+  }
+}
+
+function rejectParentConsent(id) {
+  const p = db.passes.find(x => x.id === id);
+  if (p) {
+    p.parentConsent = 'rejected';
+    p.wardenStatus = 'rejected';
+    toast("Outing denied by parent.");
+    render();
+  }
+}
+
+// ADMIN APP
+function renderAdminApp(container) {
+  const total = db.students.length;
+  const outside = db.students.filter(s => s.status === 'outside').length;
+  const overdue = db.students.filter(s => s.status === 'overdue').length;
+  const unpaid = db.students.filter(s => s.rentStatus === 'unpaid').length;
+
+  container.innerHTML = `
+    <div class="app-header">
+      <div>
+        <div class="app-title">Super Admin Master Console</div>
+        <div style="font-size:0.7rem; color:#94a3b8;">Hostel Group Central Dashboard</div>
+      </div>
+      <span class="badge badge-admin">Admin</span>
+    </div>
+
+    <div class="content">
+      <div style="display:grid; grid-template-columns: repeat(2, 1fr); gap:8px;">
+        <div class="card" style="text-align:center;">
+          <div style="font-size:1.3rem; font-weight:700; color:#60a5fa;">${total}</div>
+          <div style="font-size:0.7rem; color:#94a3b8;">Total Residents</div>
+        </div>
+        <div class="card" style="text-align:center;">
+          <div style="font-size:1.3rem; font-weight:700; color:#fbbf24;">${outside}</div>
+          <div style="font-size:0.7rem; color:#94a3b8;">Currently Outside</div>
+        </div>
+        <div class="card" style="text-align:center;">
+          <div style="font-size:1.3rem; font-weight:700; color:#ef4444;">${overdue}</div>
+          <div style="font-size:0.7rem; color:#94a3b8;">Curfew Defaulters</div>
+        </div>
+        <div class="card" style="text-align:center;">
+          <div style="font-size:1.3rem; font-weight:700; color:#a78bfa;">${unpaid}</div>
+          <div style="font-size:0.7rem; color:#94a3b8;">Unpaid Accounts</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Emergency Broadcast Tool</div>
+        <input id="broadcastMsg" placeholder="e.g. Inclement weather - gate closed" />
+        <button class="btn btn-danger btn-sm" style="margin-top:6px;" onclick="sendBroadcast()">Dispatch Priority Alert</button>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Biometric Enrollment Registry</div>
+        <div style="display:flex; flex-direction:column; gap:6px;">
+          ${db.students.map(s => `
+            <div style="display:flex; justify-content:space-between; align-items:center; background:#0f172a; padding:8px; border-radius:6px; font-size:0.75rem;">
+              <div>
+                <strong>${s.name}</strong> •${s.room}
+                <div style="color:#94a3b8;">ID: <code>${s.fingerprintId}</code></div>
+              </div>
+              <span class="status-pill status-inside">ENROLLED</span>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function sendBroadcast() {
+  const msg = document.getElementById('broadcastMsg').value;
+  if (!msg) return;
+  db.logs.unshift({ id: Date.now(), time: "Now", text: `📢 ADMIN BROADCAST: "${msg}"` });
+  toast("Broadcast sent to all apps!");
+  document.getElementById('broadcastMsg').value = '';
+  render();
+}
+
+render();
+</script>
+</body>
+</html>
