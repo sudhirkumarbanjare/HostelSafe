@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>HostelGuard 360 - Complete Multi-Screen Gate & Resident Operations Platform</title>
+  <title>HostelSafe - Complete Multi-Screen Gate & Resident Operations Platform</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -1395,9 +1395,19 @@
         </svg>
       </div>
       <div class="brand-text">
-        <h1>HostelGuard 360 <span class="status-pill status-approved" style="font-size: 0.58rem;">ALL SCREENS DEMO</span></h1>
+        <h1>HostelSafe <span class="status-pill status-approved" style="font-size: 0.58rem;">ALL SCREENS DEMO</span></h1>
         <p>BIOMETRIC GATE VERIFICATION • RENT LEDGER • CURFEW AUDIT</p>
       </div>
+    </div>
+
+    <!-- Phase Mode Quick Switcher -->
+    <div style="display:flex; align-items:center; background:rgba(255,255,255,0.05); border:1px solid var(--border-subtle); border-radius:9999px; padding:2px; font-size:0.7rem; font-weight:700; margin:0 8px;">
+      <a href="phase1.html" style="padding:4px 10px; border-radius:9999px; text-decoration:none; color:#34d399; display:inline-flex; align-items:center; gap:4px; transition:all 0.2s;">
+        <span>📱</span> Phase 1 (App Only)
+      </a>
+      <a href="phase2.html" style="padding:4px 10px; border-radius:9999px; text-decoration:none; color:#fbbf24; display:inline-flex; align-items:center; gap:4px; transition:all 0.2s;">
+        <span>⚡</span> Phase 2 (IoT Turnstiles)
+      </a>
     </div>
 
     <div class="header-controls">
@@ -1493,11 +1503,11 @@
        1. DATA ARCHITECTURE & PERSISTENCE
        ========================================================================= */
 
-    const STORAGE_KEY = "HOSTELGUARD_360_SAAS_V3";
+    const STORAGE_KEY = "HOSTELSAFE_SAAS_V3";
 
     const DEFAULT_SEED_DATA = {
       saas: {
-        platformName: "9HostelSafe Global SaaS Cloud",
+        platformName: "HostelSafe Global SaaS Cloud",
         activeTenantId: "ten_001",
         activeCityId: "all",
         activeVenueId: "ven_101",
@@ -1510,58 +1520,83 @@
       subscriptionPlans: [
         {
           id: "starter",
-          name: "Starter PG / Hostel",
-          tagline: "For Independent Hostels & Boutique PGs",
-          pricePerMonth: 3999,
-          priceInr: 3999,
+          name: "Phase 1: Starter Digital",
+          tagline: "For Independent PGs & Boutique Hostels (Zero Hardware)",
+          pricePerMonth: 1999,
+          priceInr: 1999,
           currency: "₹",
           badgeClass: "tier-starter",
           popular: false,
-          maxBeds: 100,
+          maxBeds: 80,
           maxVenues: 1,
           maxGates: 1,
-          whatsappQuota: 500,
-          biometricHardware: "USB OTG Scanner Only",
+          whatsappQuota: 0,
+          biometricHardware: "Zero Hardware (Dynamic QR & WebCam Scanner)",
           features: [
-            "1 Venue / Campus",
-            "Up to 100 Resident Beds",
-            "1 Gate Kiosk Terminal",
-            "500 WhatsApp SMS Alerts/mo",
-            "Basic Curfew Audit Engine",
-            "Email & Community Support"
+            "1 Venue / Hostel Property",
+            "Up to 80 Resident Beds",
+            "Dedicated Admin & Warden Web Dashboard",
+            "Dynamic QR Gate Passes (30s Rotation)",
+            "WebCam QR Scanner & Manual Roll Search",
+            "SMS OTP Authentication & In-App Alerts",
+            "Room Inventory & Rent Ledger"
           ]
         },
         {
           id: "campus_pro",
-          name: "Campus Pro",
-          tagline: "For University Hostels & Multi-Wing Complexes",
-          pricePerMonth: 12999,
-          priceInr: 12999,
+          name: "Phase 1: Campus Digital Pro",
+          tagline: "For Multi-Wing Hostels & Coaching Hubs (Zero Hardware)",
+          pricePerMonth: 5999,
+          priceInr: 5999,
           currency: "₹",
           badgeClass: "tier-pro",
           popular: true,
-          maxBeds: 500,
+          maxBeds: 400,
           maxVenues: 3,
           maxGates: 4,
-          whatsappQuota: 3000,
-          biometricHardware: "USB OTG + IoT Face Recognition Turnstiles",
+          whatsappQuota: 0,
+          biometricHardware: "Zero Hardware (Dynamic QR & WebCam Scanner)",
           features: [
             "Up to 3 Venues / Campuses",
-            "Up to 500 Resident Beds",
-            "4 Gate Kiosk Terminals",
-            "3,000 WhatsApp Webhooks/mo",
-            "Real-Time Curfew Cron Engine",
-            "Automated Parent Magic Links",
-            "Multi-Child Family Portal",
+            "Up to 400 Resident Beds",
+            "Multi-Property Admin Web Dashboard",
+            "Multi-Child Cross-City Guardian Portal",
+            "In-App Outing Pass Approval with SMS OTP",
+            "In-App Evening Curfew Defaulter Broadcast",
+            "Police & Compliance Audit Log Export",
+            "Zero Physical Hardware Required"
+          ]
+        },
+        {
+          id: "smart_hardware",
+          name: "Phase 2: Smart Hardware Campus",
+          tagline: "For Colleges Needing Automated Biometric Turnstiles",
+          pricePerMonth: 14999,
+          priceInr: 14999,
+          currency: "₹",
+          badgeClass: "tier-pro",
+          popular: false,
+          maxBeds: 600,
+          maxVenues: 3,
+          maxGates: 2,
+          whatsappQuota: 2000,
+          biometricHardware: "USB OTG Mantra MFS100 + Motorized Turnstile Relay",
+          features: [
+            "Up to 600 Resident Beds",
+            "Supports 2 Motorized Gate Turnstiles",
+            "USB OTG Fingerprint Sensor Driver (Mantra MFS100)",
+            "Automated Flap Barrier Relay Opening",
+            "Warden Kiosk Terminal Station",
+            "Includes all Phase 1 Web Dashboards",
             "Priority 24/7 Desk Support"
           ]
         },
         {
           id: "enterprise",
-          name: "Enterprise Chain",
-          tagline: "For Multi-City Living Groups & Consortia",
-          pricePerMonth: 34999,
-          priceInr: 34999,
+          name: "Phase 2: Enterprise Turnstile Matrix",
+          tagline: "For Multi-City University Groups & Large Consortia",
+          pricePerMonth: 39999,
+          priceInr: 39999,
           currency: "₹",
           badgeClass: "tier-enterprise",
           popular: false,
@@ -1569,16 +1604,16 @@
           maxVenues: 999,
           maxGates: 999,
           whatsappQuota: 50000,
-          biometricHardware: "Full Hardware IoT Turnstile Integration",
+          biometricHardware: "Full Hardware Turnstile + Face AI Kiosks + RTSP CCTV",
           features: [
             "Unlimited Cities & Venues",
             "Unlimited Resident Beds",
-            "Unlimited Hardware Turnstiles",
-            "50,000 Webhook Alerts/mo",
-            "Custom White-Label Branding",
-            "Cross-City Telemetry Sync",
-            "ERP & Ledger Integration",
-            "Dedicated Customer Success Director"
+            "Unlimited Hardware Turnstiles & Flap Barriers",
+            "Automated RTSP CCTV Surveillance Snapshots",
+            "Local Edge Server Offline Sync (Zero Gate Delay)",
+            "Anti-Tailgating Sensor Beam Integration",
+            "University ERP & Active Directory SSO",
+            "Dedicated Account Manager & On-Site SLA"
           ]
         }
       ],
@@ -2369,7 +2404,7 @@
 
       bar.innerHTML = `
         <div class="saas-context-left">
-          <div class="saas-brand-badge" title="HostelGuard 360 Multi-Tenant Enterprise Cloud">
+          <div class="saas-brand-badge" title="HostelSafe Multi-Tenant Enterprise Cloud">
             <svg class="icon icon-sm" viewBox="0 0 24 24"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
             <span>SAAS HQ</span>
           </div>
@@ -2559,7 +2594,7 @@
               room: pass.room,
               type: "OVERDUE_MARKED",
               method: "Automated Curfew Scheduler",
-              operator: "HostelGuard Daemon",
+              operator: "HostelSafe Daemon",
               passId: pass.id,
               details: `Curfew breached: Deadline was ${pass.returnExpectedTime}. Resident did not report at gate.`
             });
@@ -2722,7 +2757,7 @@
         return;
       }
 
-      showToast("Onboarding Completed! Welcome to HostelGuard 360, Aarav.", "success");
+      showToast("Onboarding Completed! Welcome to HostelSafe, Aarav.", "success");
       activeResidentUid = "stu_101";
       switchRole("resident");
       currentScreen = "resident_dashboard";
@@ -2744,7 +2779,7 @@
               <div class="brand-logo-icon" style="width:26px; height:26px; border-radius:6px; display:inline-flex; align-items:center; justify-content:center;">
                 <svg class="icon icon-sm" style="stroke:#fff;" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
               </div>
-              <span>HostelGuard 360</span>
+              <span>HostelSafe</span>
               <span class="role-badge" style="background:rgba(167,139,250,0.15); color:#a78bfa; border:1px solid #8b5cf6;">Gate Access</span>
             </div>
             <div class="screen-subtitle">Identity Verification &amp; Perimeter Control System</div>
@@ -2766,7 +2801,7 @@
                 <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
               </svg>
             </div>
-            <div style="font-size:1.05rem; font-weight:800; color:#f8fafc; margin-top:4px;">HostelGuard 360 Gateway</div>
+            <div style="font-size:1.05rem; font-weight:800; color:#f8fafc; margin-top:4px;">HostelSafe Gateway</div>
             <div style="font-size:0.72rem; color:var(--text-muted); max-width:320px;">
               Unified Biometric Gate Verification, Curfew Monitoring &amp; Digital Residency Suite
             </div>
@@ -3014,7 +3049,7 @@
                 <span style="font-size:0.62rem; color:var(--text-muted);">Just now</span>
               </div>
               <div style="font-size:0.73rem; color:var(--text-main); font-family:'JetBrains Mono', monospace;">
-                HostelGuard: Your 6-digit login token is <strong style="color:#60a5fa; font-size:0.85rem;">849201</strong>. Valid for 5 mins.
+                HostelSafe: Your 6-digit login token is <strong style="color:#60a5fa; font-size:0.85rem;">849201</strong>. Valid for 5 mins.
               </div>
               <button class="btn btn-secondary btn-sm" onclick="autoFillOtp()" style="align-self:flex-start; margin-top:2px;">
                 <svg class="icon icon-sm" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
@@ -4912,7 +4947,7 @@
       const modalBody = document.getElementById("modalBody");
       const modalFooter = document.getElementById("modalFooter");
 
-      modalTitle.innerHTML = "HostelGuard 360 All-Screens Directory";
+      modalTitle.innerHTML = "HostelSafe All-Screens Directory";
       modalBody.innerHTML = `
         <div style="font-size:0.75rem; color:var(--text-muted); margin-bottom:8px;">
           Jump directly to any functional screen in the prototype demo:
@@ -5602,7 +5637,7 @@
       const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(appState.gateLogs, null, 2));
       const downloadAnchor = document.createElement('a');
       downloadAnchor.setAttribute("href", dataStr);
-      downloadAnchor.setAttribute("download", `hostelguard_audit_log_${new Date().toISOString().split('T')[0]}.json`);
+      downloadAnchor.setAttribute("download", `hostelsafe_audit_log_${new Date().toISOString().split('T')[0]}.json`);
       document.body.appendChild(downloadAnchor);
       downloadAnchor.click();
       downloadAnchor.remove();
@@ -5753,7 +5788,7 @@
             <span>₹${txn.amount.toLocaleString()}.00</span>
           </div>
           <div style="font-size:0.65rem; color:#64748b; text-align:center; margin-top:6px; border-top:1px dashed #cbd5e1; padding-top:6px;">
-            This is a computer-generated proof of payment verified by HostelGuard 360 Core Ledger.
+            This is a computer-generated proof of payment verified by HostelSafe Core Ledger.
           </div>
         </div>
       `;

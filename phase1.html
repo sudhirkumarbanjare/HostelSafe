@@ -1,0 +1,1210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HostelSafe Phase 1 - Pure Software SaaS (Web Dashboards & Apps, Zero Hardware)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-base: #060a12;
+      --bg-surface: #0c1220;
+      --bg-card: #111a2e;
+      --bg-card-hover: #18233c;
+      --border-subtle: rgba(255, 255, 255, 0.08);
+      --border-strong: rgba(255, 255, 255, 0.16);
+      --accent-primary: #3b82f6;
+      --accent-secondary: #10b981;
+      --accent-warning: #f59e0b;
+      --accent-danger: #ef4444;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --text-dim: #64748b;
+      --radius-sm: 6px;
+      --radius-md: 10px;
+      --radius-lg: 14px;
+      --radius-full: 9999px;
+      --shadow-lg: 0 12px 30px rgba(0, 0, 0, 0.5);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background-color: var(--bg-base);
+      color: var(--text-main);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+    }
+
+    /* Master Top Bar */
+    .master-header {
+      background: rgba(10, 16, 28, 0.95);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border-subtle);
+      padding: 10px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .brand-section {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .brand-logo-icon {
+      width: 32px;
+      height: 32px;
+      background: linear-gradient(135deg, #3b82f6, #10b981);
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 12px rgba(59, 130, 246, 0.4);
+    }
+
+    .brand-text h1 {
+      font-size: 0.98rem;
+      font-weight: 800;
+      letter-spacing: -0.3px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .phase-badge {
+      font-size: 0.62rem;
+      font-weight: 800;
+      padding: 2px 7px;
+      border-radius: var(--radius-full);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      background: rgba(16, 185, 129, 0.15);
+      border: 1px solid rgba(16, 185, 129, 0.35);
+      color: #34d399;
+    }
+
+    .phase-toggle-box {
+      display: flex;
+      align-items: center;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-full);
+      padding: 2px;
+      font-size: 0.72rem;
+      font-weight: 700;
+    }
+
+    .phase-toggle-btn {
+      padding: 4px 10px;
+      border-radius: var(--radius-full);
+      border: none;
+      background: transparent;
+      color: var(--text-muted);
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      transition: all 0.2s;
+    }
+
+    .phase-toggle-btn.active {
+      background: #10b981;
+      color: #fff;
+    }
+
+    .phase-toggle-btn:hover:not(.active) {
+      color: #fff;
+    }
+
+    /* Sub Navigation Bar for Dashboards and Apps */
+    .role-nav-group {
+      display: flex;
+      gap: 4px;
+      background: rgba(0, 0, 0, 0.3);
+      padding: 3px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border-subtle);
+    }
+
+    .role-btn {
+      padding: 5px 12px;
+      font-size: 0.74rem;
+      font-weight: 700;
+      border-radius: var(--radius-sm);
+      border: none;
+      background: transparent;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .role-btn.active {
+      background: var(--bg-card);
+      color: #fff;
+      border: 1px solid var(--border-strong);
+    }
+
+    /* Context Banner */
+    .saas-bar {
+      background: #090f1e;
+      border-bottom: 1px solid var(--border-subtle);
+      padding: 6px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 10px;
+      font-size: 0.72rem;
+    }
+
+    .saas-pill {
+      background: rgba(59, 130, 246, 0.12);
+      border: 1px solid rgba(59, 130, 246, 0.3);
+      color: #60a5fa;
+      padding: 2px 7px;
+      border-radius: var(--radius-full);
+      font-size: 0.65rem;
+      font-weight: 700;
+    }
+
+    /* Main Container */
+    .app-main {
+      flex: 1;
+      max-width: 1240px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 16px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .ui-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+      position: relative;
+    }
+
+    .ui-card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .ui-card-title {
+      font-size: 0.92rem;
+      font-weight: 800;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn {
+      padding: 7px 14px;
+      font-size: 0.76rem;
+      font-weight: 700;
+      border-radius: var(--radius-sm);
+      border: none;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      justify-content: center;
+      transition: all 0.2s;
+    }
+
+    .btn-primary { background: #3b82f6; color: #fff; }
+    .btn-primary:hover { background: #2563eb; }
+    .btn-success { background: #10b981; color: #fff; }
+    .btn-success:hover { background: #059669; }
+    .btn-warning { background: #f59e0b; color: #fff; }
+    .btn-danger { background: #ef4444; color: #fff; }
+    .btn-secondary { background: rgba(255, 255, 255, 0.08); color: #fff; }
+    .btn-secondary:hover { background: rgba(255, 255, 255, 0.14); }
+    .btn-sm { padding: 4px 8px; font-size: 0.68rem; }
+
+    /* Dynamic QR Pass Container */
+    .qr-container {
+      background: #090f1f;
+      border: 2px dashed rgba(59, 130, 246, 0.4);
+      border-radius: var(--radius-md);
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 12px;
+    }
+
+    .qr-box {
+      width: 170px;
+      height: 170px;
+      background: #fff;
+      border-radius: 8px;
+      padding: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      box-shadow: 0 0 20px rgba(59, 130, 246, 0.2);
+    }
+
+    .qr-matrix-sim {
+      width: 100%;
+      height: 100%;
+      background: 
+        repeating-linear-gradient(0deg, #0f172a, #0f172a 4px, #fff 4px, #fff 8px),
+        repeating-linear-gradient(90deg, #0f172a, #0f172a 4px, #fff 4px, #fff 8px);
+      background-blend-mode: difference;
+      border-radius: 4px;
+    }
+
+    .timer-ring {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: #38bdf8;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* Warden Camera Simulator */
+    .camera-kiosk {
+      background: #050811;
+      border: 2px solid #10b981;
+      border-radius: var(--radius-md);
+      height: 220px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .camera-scanline {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 3px;
+      background: linear-gradient(90deg, transparent, #34d399, transparent);
+      box-shadow: 0 0 12px #10b981;
+      animation: scanAnim 2.2s infinite ease-in-out;
+    }
+
+    @keyframes scanAnim {
+      0% { top: 10%; opacity: 0.2; }
+      50% { top: 85%; opacity: 1; }
+      100% { top: 10%; opacity: 0.2; }
+    }
+
+    .camera-target-reticle {
+      width: 140px;
+      height: 140px;
+      border: 2px dashed rgba(16, 185, 129, 0.6);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      font-size: 0.72rem;
+      color: #34d399;
+      font-weight: 700;
+      padding: 10px;
+    }
+
+    /* Form Fields */
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .form-label {
+      font-size: 0.7rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+    }
+
+    .form-input, .form-select {
+      background: #080d1a;
+      border: 1px solid var(--border-strong);
+      color: #fff;
+      padding: 7px 10px;
+      border-radius: var(--radius-sm);
+      font-family: inherit;
+      font-size: 0.78rem;
+    }
+
+    .form-input:focus, .form-select:focus {
+      outline: none;
+      border-color: var(--accent-primary);
+    }
+
+    /* Audit Stream */
+    .audit-item {
+      background: #090f1f;
+      border: 1px solid var(--border-subtle);
+      border-left: 3px solid var(--accent-primary);
+      padding: 8px 12px;
+      border-radius: var(--radius-sm);
+      font-size: 0.74rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .status-pill {
+      font-size: 0.65rem;
+      font-weight: 800;
+      padding: 2px 7px;
+      border-radius: var(--radius-full);
+      text-transform: uppercase;
+    }
+
+    .status-inside { background: rgba(16, 185, 129, 0.15); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.3); }
+    .status-outside { background: rgba(245, 158, 11, 0.15); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.3); }
+    .status-defaulter { background: rgba(239, 68, 68, 0.15); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.3); }
+
+    /* In-App Notification Center */
+    .notification-bubble {
+      background: #091224;
+      border: 1px solid var(--border-strong);
+      border-radius: var(--radius-md);
+      padding: 10px 14px;
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      margin-bottom: 8px;
+    }
+
+    .notification-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #38bdf8;
+      margin-top: 5px;
+      flex-shrink: 0;
+    }
+
+    /* Pricing Table */
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 16px;
+    }
+
+    .plan-card {
+      background: #090f20;
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      position: relative;
+    }
+
+    .plan-card.active {
+      border-color: #10b981;
+      box-shadow: 0 0 20px rgba(16, 185, 129, 0.15);
+    }
+
+    .plan-price {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: #fff;
+    }
+
+    /* Modal for SMS OTP */
+    .modal-overlay {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0, 0, 0, 0.75);
+      backdrop-filter: blur(4px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 200;
+    }
+
+    .modal-card {
+      background: #0d1629;
+      border: 1px solid var(--border-strong);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      max-width: 420px;
+      width: 90%;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      box-shadow: var(--shadow-lg);
+    }
+
+    .toast-tray {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      z-index: 999;
+    }
+
+    .toast-msg {
+      background: #1e293b;
+      border: 1px solid #3b82f6;
+      color: #fff;
+      padding: 8px 14px;
+      border-radius: var(--radius-md);
+      font-size: 0.75rem;
+      box-shadow: var(--shadow-lg);
+      animation: fadeIn 0.2s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Master Top Header -->
+  <header class="master-header">
+    <div class="brand-section">
+      <div class="brand-logo-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      </div>
+      <div class="brand-text">
+        <h1>HostelSafe</h1>
+      </div>
+      <span class="phase-badge">Phase 1: App Only</span>
+    </div>
+
+    <!-- Phase Switcher Pills -->
+    <div class="phase-toggle-box">
+      <a href="phase1.html" class="phase-toggle-btn active">
+        <span>📱</span> Phase 1: Pure Software (No Hardware)
+      </a>
+      <a href="phase2.html" class="phase-toggle-btn">
+        <span>⚡</span> Phase 2: Hardware &amp; Turnstiles
+      </a>
+    </div>
+
+    <!-- Interactive Role Views -->
+    <div class="role-nav-group">
+      <button class="role-btn active" onclick="switchView('admin')">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+        Admin Dashboard
+      </button>
+      <button class="role-btn" onclick="switchView('warden')">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+        Warden Gate Desk
+      </button>
+      <button class="role-btn" onclick="switchView('resident')">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+        Resident App
+      </button>
+      <button class="role-btn" onclick="switchView('parent')">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        Parent App
+      </button>
+      <button class="role-btn" onclick="switchView('pricing')">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"/><path d="M12 18V6"/></svg>
+        SaaS Pricing
+      </button>
+    </div>
+  </header>
+
+  <!-- SaaS Sub Context Bar -->
+  <div class="saas-bar">
+    <div style="display:flex; align-items:center; gap:8px;">
+      <span class="saas-pill">ZERO HARDWARE EDITION</span>
+      <span style="color:var(--text-muted);">Tenant: <strong>Oxford &amp; Shivalik Student Housing</strong></span>
+      <span style="color:var(--text-dim);">•</span>
+      <span style="color:#34d399;">Active License: <strong>Phase 1 - Campus Digital Pro</strong></span>
+    </div>
+    <div style="display:flex; align-items:center; gap:12px; font-size:0.72rem;">
+      <span>Auth Protocol: <strong style="color:#38bdf8;">SMS OTP Only</strong></span>
+      <span>Notifications: <strong style="color:#10b981;">Strictly In-App</strong></span>
+      <span>Hardware Required: <strong style="color:#fbbf24;">₹0 (None)</strong></span>
+    </div>
+  </div>
+
+  <!-- Main View Container -->
+  <main class="app-main" id="viewContainer">
+    <!-- Populated dynamically via JS -->
+  </main>
+
+  <!-- Toast Notification Tray -->
+  <div class="toast-tray" id="toastTray"></div>
+
+  <!-- OTP Verification Modal Container -->
+  <div id="otpModalContainer" style="display:none;"></div>
+
+  <script>
+    // In-Memory State for Phase 1 Demo
+    const phase1Data = {
+      property: "Shivalik North Campus (Delhi)",
+      properties: ["Shivalik North Campus (Delhi)", "Aravalli Tech Park (Bengaluru)"],
+      stats: {
+        totalBeds: 300,
+        occupied: 242,
+        inside: 218,
+        outside: 20,
+        defaulters: 4,
+        rentCollected: "₹18,40,000",
+        rentPending: "₹1,60,000"
+      },
+      residents: [
+        { id: "stu_101", name: "Aarav Sharma", rollNo: "CS2026-042", room: "B-204", phone: "+91 98110 22311", status: "inside", curfew: "20:30", parentPhone: "+91 98110 99881", parentName: "Rajesh Sharma" },
+        { id: "stu_102", name: "Rohit Verma", rollNo: "ME2026-118", room: "B-108", phone: "+91 98220 33411", status: "outside", curfew: "20:30", parentPhone: "+91 98220 88771", parentName: "Sanjay Verma" },
+        { id: "stu_103", name: "Kabir Sen", rollNo: "CS2026-077", room: "B-402", phone: "+91 98330 44511", status: "outside", curfew: "20:30", parentPhone: "+91 98330 77661", parentName: "Anil Sen" },
+        { id: "stu_104", name: "Vikram Malhotra", rollNo: "EC2026-015", room: "A-301", phone: "+91 98440 55611", status: "defaulter", curfew: "20:30", parentPhone: "+91 98440 66551", parentName: "Deepak Malhotra" },
+        { id: "stu_105", name: "Pooja Hegde", rollNo: "BT2026-009", room: "W2-104", phone: "+91 98550 66711", status: "inside", curfew: "20:30", parentPhone: "+91 98550 55441", parentName: "Raghav Hegde" }
+      ],
+      pendingParentPasses: [
+        {
+          id: "pass_904",
+          studentUid: "stu_106",
+          studentName: "Ananya Sharma",
+          city: "Bengaluru",
+          hostel: "Aravalli Tech Park",
+          type: "Weekend Leave",
+          destination: "IISC Bengaluru Tech Symposium",
+          returnExpected: "Tomorrow 20:00",
+          status: "pending_parent"
+        }
+      ],
+      inAppNotifications: [
+        { id: "notif_1", time: "16:45", title: "Pass Endorsement Approved", body: "Guardian Rajesh Sharma approved Weekend Pass via SMS OTP.", target: "Resident Aarav Sharma" },
+        { id: "notif_2", time: "16:15", title: "Gate Check-Out Logged", body: "Rohit Verma checked out via Warden WebCam QR Scanner.", target: "Parent Sanjay Verma" },
+        { id: "notif_3", time: "15:30", title: "Curfew Defaulter Alert", body: "Vikram Malhotra exceeded evening curfew deadline (20:30).", target: "Warden Desk & Parent" }
+      ],
+      logs: [
+        { time: "16:15", name: "Rohit Verma", room: "B-108", type: "CHECK_OUT", method: "WebCam QR Scanner (Zero Hardware)", note: "Pass pass_902 verified. Day Outing approved." },
+        { time: "14:05", name: "Kabir Sen", room: "B-402", type: "CHECK_OUT", method: "Manual Roll Search (Warden Desk)", note: "Verified CS2026-077 via roster. Library pass." }
+      ]
+    };
+
+    let currentView = "admin";
+    let qrTimeLeft = 30;
+
+    // Countdown ring for dynamic QR
+    setInterval(() => {
+      qrTimeLeft--;
+      if (qrTimeLeft <= 0) qrTimeLeft = 30;
+      const el = document.getElementById("qrCountdownVal");
+      if (el) el.innerText = qrTimeLeft + "s";
+    }, 1000);
+
+    function showToast(msg) {
+      const tray = document.getElementById("toastTray");
+      const div = document.createElement("div");
+      div.className = "toast-msg";
+      div.innerText = msg;
+      tray.appendChild(div);
+      setTimeout(() => div.remove(), 3500);
+    }
+
+    function switchView(view) {
+      currentView = view;
+      document.querySelectorAll(".role-btn").forEach((btn, idx) => {
+        btn.classList.toggle("active", ["admin", "warden", "resident", "parent", "pricing"][idx] === view);
+      });
+      render();
+    }
+
+    // Warden Manual Check-in / Check-out
+    function handleManualCheck(type) {
+      const input = document.getElementById("manualSearchInput");
+      const val = (input ? input.value : "").trim().toLowerCase();
+      if (!val) {
+        showToast("Please enter student roll number or name.");
+        return;
+      }
+      const student = phase1Data.residents.find(r => r.rollNo.toLowerCase().includes(val) || r.name.toLowerCase().includes(val));
+      if (!student) {
+        showToast("No resident found matching query.");
+        return;
+      }
+
+      student.status = type === "out" ? "outside" : "inside";
+      const now = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      phase1Data.logs.unshift({
+        time: now,
+        name: student.name,
+        room: student.room,
+        type: type === "out" ? "CHECK_OUT" : "CHECK_IN",
+        method: "Manual Roster Check (Zero Hardware)",
+        note: `Warden verified ${student.name} (${student.rollNo}) on Web Dashboard.`
+      });
+
+      // Add In-App notification
+      phase1Data.inAppNotifications.unshift({
+        id: "notif_" + Date.now(),
+        time: now,
+        title: `Gate ${type === "out" ? "Exit" : "Entry"} Logged`,
+        body: `${student.name} marked ${type === "out" ? "CHECKED OUT" : "CHECKED IN"} by Warden Desk.`,
+        target: `Parent of ${student.name}`
+      });
+
+      showToast(`Success: ${student.name} marked ${type === "out" ? "CHECKED OUT" : "CHECKED IN"}!`);
+      render();
+    }
+
+    // Warden WebCam QR Simulator
+    function scanSimulatedQr() {
+      const student = phase1Data.residents[0]; // Aarav Sharma
+      const now = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      student.status = student.status === "inside" ? "outside" : "inside";
+
+      phase1Data.logs.unshift({
+        time: now,
+        name: student.name,
+        room: student.room,
+        type: student.status === "outside" ? "CHECK_OUT" : "CHECK_IN",
+        method: "Laptop WebCam Dynamic QR Scan",
+        note: `Validated 30-sec HMAC token for ${student.name}. Gate cleared.`
+      });
+
+      phase1Data.inAppNotifications.unshift({
+        id: "notif_" + Date.now(),
+        time: now,
+        title: `Dynamic QR Gate ${student.status === "outside" ? "Departure" : "Arrival"}`,
+        body: `${student.name} verified via WebCam scanner at main gate.`,
+        target: `Parent of ${student.name}`
+      });
+
+      showToast(`Scanned QR Pass: ${student.name} marked ${student.status.toUpperCase()}!`);
+      render();
+    }
+
+    // Trigger In-App Curfew Alert for Defaulters
+    function broadcastCurfewAlert() {
+      const now = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      phase1Data.inAppNotifications.unshift({
+        id: "notif_" + Date.now(),
+        time: now,
+        title: "URGENT CURFEW NOTICE",
+        body: "Hostel gates close strictly at 20:30. In-App defaulter report will be transmitted to campus authorities.",
+        target: "All Residents & Parents"
+      });
+      showToast("In-App Curfew Notification broadcast to all resident and guardian apps!");
+      render();
+    }
+
+    // Parent In-App SMS OTP Endorsement Modal Flow
+    function openParentOtpModal(passId) {
+      const pass = phase1Data.pendingParentPasses.find(p => p.id === passId);
+      if (!pass) return;
+
+      const modal = document.getElementById("otpModalContainer");
+      modal.style.display = "flex";
+      modal.className = "modal-overlay";
+      modal.innerHTML = `
+        <div class="modal-card">
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <div style="font-weight:800; font-size:1rem; color:#fff;">SMS OTP Verification</div>
+            <button onclick="closeOtpModal()" style="background:none; border:none; color:var(--text-muted); cursor:pointer; font-size:1.1rem;">✕</button>
+          </div>
+          <div style="font-size:0.75rem; color:var(--text-muted);">
+            A 4-digit SMS OTP has been sent to your registered guardian phone: <strong>+91 98110 99881</strong> to authorize outing for <strong>${pass.studentName}</strong>.
+          </div>
+          <div style="background:#090f1f; border:1px solid var(--border-subtle); padding:10px; border-radius:6px; font-size:0.72rem;">
+            <div><strong>Destination:</strong> ${pass.destination}</div>
+            <div><strong>Expected Return:</strong> ${pass.returnExpected}</div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Enter 4-Digit SMS OTP</label>
+            <input type="text" id="parentOtpInput" class="form-input" placeholder="e.g. 7492" value="7492" style="font-family:'JetBrains Mono', monospace; letter-spacing:4px; font-size:1.1rem; text-align:center;" />
+          </div>
+          <div style="display:flex; gap:8px;">
+            <button class="btn btn-secondary" onclick="closeOtpModal()" style="flex:1;">Cancel</button>
+            <button class="btn btn-success" onclick="confirmParentOtpApproval('${passId}')" style="flex:1;">Verify &amp; Approve In-App</button>
+          </div>
+        </div>
+      `;
+    }
+
+    function closeOtpModal() {
+      const modal = document.getElementById("otpModalContainer");
+      modal.style.display = "none";
+      modal.innerHTML = "";
+    }
+
+    function confirmParentOtpApproval(passId) {
+      const otpInput = document.getElementById("parentOtpInput");
+      const val = (otpInput ? otpInput.value : "").trim();
+      if (!val || val.length < 4) {
+        showToast("Please enter a valid 4-digit SMS OTP.");
+        return;
+      }
+
+      phase1Data.pendingParentPasses = phase1Data.pendingParentPasses.filter(p => p.id !== passId);
+      closeOtpModal();
+
+      const now = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      phase1Data.inAppNotifications.unshift({
+        id: "notif_" + Date.now(),
+        time: now,
+        title: "Outing Pass Approved by Guardian",
+        body: "Guardian verified SMS OTP and authorized leave. QR Pass is now live.",
+        target: "Resident Ananya Sharma & Warden Desk"
+      });
+
+      showToast("Success: Outing authorized via SMS OTP! Notification delivered In-App.");
+      render();
+    }
+
+    function render() {
+      const container = document.getElementById("viewContainer");
+      if (!container) return;
+
+      // 1. ADMIN DASHBOARD WEBSITE VIEW
+      if (currentView === "admin") {
+        container.innerHTML = `
+          <!-- Admin Dashboard Header & Metrics -->
+          <div class="ui-card">
+            <div class="ui-card-header">
+              <div>
+                <div class="ui-card-title">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+                  Admin Master Dashboard Website
+                </div>
+                <div style="font-size:0.72rem; color:var(--text-muted); margin-top:2px;">
+                  Multi-property oversight, occupancy analytics, dues collection, and in-app communications.
+                </div>
+              </div>
+              <div style="display:flex; gap:8px; align-items:center;">
+                <select class="form-select" onchange="showToast('Switched property to ' + this.value);">
+                  ${phase1Data.properties.map(p => `<option ${p === phase1Data.property ? 'selected' : ''}>${p}</option>`).join('')}
+                </select>
+                <button class="btn btn-warning btn-sm" onclick="broadcastCurfewAlert()">
+                  📢 Broadcast In-App Curfew Alert
+                </button>
+              </div>
+            </div>
+
+            <!-- KPI Metric Cards -->
+            <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap:12px; margin-top:8px;">
+              <div style="background:#090f1f; border:1px solid var(--border-subtle); padding:12px; border-radius:var(--radius-md);">
+                <div style="font-size:0.7rem; color:var(--text-muted); text-transform:uppercase;">Total Beds Occupied</div>
+                <div style="font-size:1.4rem; font-weight:800; color:#fff;">${phase1Data.stats.occupied} <span style="font-size:0.75rem; color:var(--text-dim);">/ ${phase1Data.stats.totalBeds}</span></div>
+                <div style="font-size:0.68rem; color:#34d399;">80.6% Occupancy Rate</div>
+              </div>
+
+              <div style="background:#090f1f; border:1px solid var(--border-subtle); padding:12px; border-radius:var(--radius-md);">
+                <div style="font-size:0.7rem; color:var(--text-muted); text-transform:uppercase;">Currently Inside</div>
+                <div style="font-size:1.4rem; font-weight:800; color:#34d399;">${phase1Data.stats.inside}</div>
+                <div style="font-size:0.68rem; color:var(--text-muted);">Verified in premises</div>
+              </div>
+
+              <div style="background:#090f1f; border:1px solid var(--border-subtle); padding:12px; border-radius:var(--radius-md);">
+                <div style="font-size:0.7rem; color:var(--text-muted); text-transform:uppercase;">Outside On Pass</div>
+                <div style="font-size:1.4rem; font-weight:800; color:#fbbf24;">${phase1Data.stats.outside}</div>
+                <div style="font-size:0.68rem; color:var(--text-muted);">Expected return by 20:30</div>
+              </div>
+
+              <div style="background:#090f1f; border:1px solid rgba(239,68,68,0.3); padding:12px; border-radius:var(--radius-md);">
+                <div style="font-size:0.7rem; color:#f87171; text-transform:uppercase;">Curfew Defaulters</div>
+                <div style="font-size:1.4rem; font-weight:800; color:#ef4444;">${phase1Data.stats.defaulters}</div>
+                <div style="font-size:0.68rem; color:#f87171;">In-App alerts dispatched</div>
+              </div>
+
+              <div style="background:#090f1f; border:1px solid var(--border-subtle); padding:12px; border-radius:var(--radius-md);">
+                <div style="font-size:0.7rem; color:var(--text-muted); text-transform:uppercase;">Monthly Rent Collected</div>
+                <div style="font-size:1.4rem; font-weight:800; color:#60a5fa;">${phase1Data.stats.rentCollected}</div>
+                <div style="font-size:0.68rem; color:var(--text-muted);">Pending: ${phase1Data.stats.rentPending}</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Resident Directory & Curfew Roster -->
+          <div style="display:grid; grid-template-columns: 2fr 1fr; gap:16px;">
+            <div class="ui-card">
+              <div class="ui-card-header">
+                <div class="ui-card-title">Resident Roster &amp; Gate Pass Status</div>
+                <span style="font-size:0.72rem; color:var(--text-muted);">${phase1Data.residents.length} residents shown</span>
+              </div>
+
+              <table style="width:100%; border-collapse:collapse; font-size:0.74rem;">
+                <thead>
+                  <tr style="text-align:left; border-bottom:1px solid var(--border-subtle); color:var(--text-muted);">
+                    <th style="padding:8px 6px;">Resident</th>
+                    <th style="padding:8px 6px;">Roll No</th>
+                    <th style="padding:8px 6px;">Room</th>
+                    <th style="padding:8px 6px;">Curfew</th>
+                    <th style="padding:8px 6px;">Guardian</th>
+                    <th style="padding:8px 6px;">Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  ${phase1Data.residents.map(r => `
+                    <tr style="border-bottom:1px solid rgba(255,255,255,0.04);">
+                      <td style="padding:8px 6px; font-weight:700; color:#fff;">${r.name}</td>
+                      <td style="padding:8px 6px; font-family:'JetBrains Mono', monospace; color:var(--text-muted);">${r.rollNo}</td>
+                      <td style="padding:8px 6px; color:var(--text-dim);">${r.room}</td>
+                      <td style="padding:8px 6px; color:#fbbf24;">${r.curfew}</td>
+                      <td style="padding:8px 6px; color:var(--text-muted);">${r.parentName}</td>
+                      <td style="padding:8px 6px;">
+                        <span class="status-pill ${r.status === 'inside' ? 'status-inside' : (r.status === 'outside' ? 'status-outside' : 'status-defaulter')}">
+                          ${r.status.toUpperCase()}
+                        </span>
+                      </td>
+                    </tr>
+                  `).join('')}
+                </tbody>
+              </table>
+            </div>
+
+            <!-- In-App Notification Feed -->
+            <div class="ui-card">
+              <div class="ui-card-header">
+                <div class="ui-card-title">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+                  In-App Notification Feed
+                </div>
+                <span class="saas-pill">ON-APP ONLY</span>
+              </div>
+              <div style="font-size:0.68rem; color:var(--text-muted);">All system alerts and pass endorsements are delivered strictly in-app (no WhatsApp dependency).</div>
+              <div style="display:flex; flex-direction:column; gap:8px; margin-top:4px;">
+                ${phase1Data.inAppNotifications.map(n => `
+                  <div class="notification-bubble">
+                    <div class="notification-dot"></div>
+                    <div style="flex:1;">
+                      <div style="display:flex; justify-content:space-between;">
+                        <strong style="color:#fff; font-size:0.74rem;">${n.title}</strong>
+                        <span style="font-size:0.65rem; color:var(--text-dim);">${n.time}</span>
+                      </div>
+                      <div style="font-size:0.68rem; color:var(--text-muted); margin-top:2px;">${n.body}</div>
+                      <div style="font-size:0.64rem; color:#38bdf8; margin-top:2px;">Target: ${n.target}</div>
+                    </div>
+                  </div>
+                `).join('')}
+              </div>
+            </div>
+          </div>
+        `;
+      } 
+      
+      // 2. WARDEN GATE DESK WEBSITE VIEW
+      else if (currentView === "warden") {
+        container.innerHTML = `
+          <!-- Warden Gate Desk Website Header -->
+          <div class="ui-card">
+            <div class="ui-card-header">
+              <div>
+                <div class="ui-card-title">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+                  Warden Gate Desk Website (Zero Hardware Required)
+                </div>
+                <div style="font-size:0.72rem; color:var(--text-muted);">
+                  Verify dynamic QR passes using any laptop webcam, tablet, or smartphone browser. Includes manual roll search.
+                </div>
+              </div>
+              <div style="display:flex; gap:6px;">
+                <span class="status-pill status-inside">WEBCAM READY</span>
+                <span class="status-pill status-outside">CURFEW: 20:30</span>
+              </div>
+            </div>
+          </div>
+
+          <div style="display:grid; grid-template-columns: 1fr 1.2fr; gap:16px;">
+            <!-- WebCam QR Scanner & Manual Lookup -->
+            <div class="ui-card">
+              <div class="ui-card-header">
+                <div class="ui-card-title">WebCam QR Scanner</div>
+                <span style="font-size:0.68rem; color:var(--text-muted);">No dedicated hardware needed</span>
+              </div>
+
+              <div class="camera-kiosk" onclick="scanSimulatedQr()" style="cursor:pointer;" title="Click to simulate camera QR read">
+                <div class="camera-scanline"></div>
+                <div class="camera-target-reticle">
+                  Align Student QR In Frame<br><span style="font-size:0.65rem; color:#fff;">(Click to Simulate Scan)</span>
+                </div>
+                <div style="font-size:0.68rem; color:var(--text-dim); margin-top:4px;">
+                  Runs via WebRTC in Chrome/Safari on Warden laptop or mobile.
+                </div>
+              </div>
+
+              <!-- Manual Roll Search Desk -->
+              <div style="border-top:1px solid var(--border-subtle); padding-top:10px;">
+                <div style="font-size:0.72rem; font-weight:700; color:var(--text-muted); margin-bottom:6px;">Manual Roster Lookup (e.g. Phone battery discharged):</div>
+                <div style="display:flex; gap:6px;">
+                  <input type="text" id="manualSearchInput" class="form-input" style="flex:1;" placeholder="Enter Roll No or Name (e.g. CS2026-042 or Rohit)" />
+                  <button class="btn btn-warning btn-sm" onclick="handleManualCheck('out')">Check Out</button>
+                  <button class="btn btn-success btn-sm" onclick="handleManualCheck('in')">Check In</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Live Gate Audit Log -->
+            <div class="ui-card">
+              <div class="ui-card-header">
+                <div class="ui-card-title">Live Gate Audit Stream</div>
+                <span style="font-size:0.7rem; color:var(--text-muted);">${phase1Data.logs.length} transactions today</span>
+              </div>
+
+              <div style="display:flex; flex-direction:column; gap:8px;">
+                ${phase1Data.logs.map(l => `
+                  <div class="audit-item" style="border-left-color: ${l.type === 'CHECK_OUT' ? '#f59e0b' : '#10b981'};">
+                    <div>
+                      <div style="font-weight:700; color:#fff;">[${l.time}] ${l.name} (${l.room}) — <span style="color:${l.type==='CHECK_OUT'?'#fbbf24':'#34d399'};">${l.type}</span></div>
+                      <div style="font-size:0.68rem; color:var(--text-muted);">${l.note}</div>
+                      <div style="font-size:0.65rem; color:var(--text-dim);">Scanner: ${l.method}</div>
+                    </div>
+                    <span class="status-pill ${l.type==='CHECK_OUT'?'status-outside':'status-inside'}">${l.type}</span>
+                  </div>
+                `).join('')}
+              </div>
+            </div>
+          </div>
+        `;
+      } 
+      
+      // 3. RESIDENT APP VIEW
+      else if (currentView === "resident") {
+        container.innerHTML = `
+          <div style="display:grid; grid-template-columns: 1fr 1fr; gap:16px;">
+            <!-- Dynamic QR Pass -->
+            <div class="ui-card">
+              <div class="ui-card-header">
+                <div class="ui-card-title">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+                  Resident Dynamic QR Gate Pass
+                </div>
+                <span class="status-pill status-inside">ACTIVE PASS</span>
+              </div>
+
+              <div class="qr-container">
+                <div class="qr-box">
+                  <div class="qr-matrix-sim"></div>
+                </div>
+                <div>
+                  <div style="font-weight:800; font-size:0.95rem; color:#fff;">Aarav Sharma • Room B-204</div>
+                  <div style="font-size:0.72rem; color:var(--text-muted);">Roll: CS2026-042 • Shivalik North Campus</div>
+                </div>
+                <div class="timer-ring">
+                  <span>⏱ Dynamic token rotates in:</span>
+                  <span id="qrCountdownVal" style="color:#fbbf24;">${qrTimeLeft}s</span>
+                </div>
+                <div style="font-size:0.68rem; color:var(--text-dim); max-width:280px;">
+                  30-second rotating cryptographic token prevents screenshot sharing. Present to Warden webcam.
+                </div>
+              </div>
+            </div>
+
+            <!-- Apply Pass & In-App Notification Feed -->
+            <div class="ui-card">
+              <div class="ui-card-header">
+                <div class="ui-card-title">Apply Outing / Day Pass</div>
+                <span style="font-size:0.7rem; color:#fbbf24;">Evening Curfew: 20:30</span>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">Outing Type</label>
+                <select class="form-select">
+                  <option>Day Outing (City Limits - Return by 20:30)</option>
+                  <option>Late Night Pass (Requires Parent In-App SMS OTP Approval)</option>
+                  <option>Weekend Overnight Leave</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">Destination</label>
+                <input type="text" class="form-input" value="Central University Science Library" />
+              </div>
+
+              <div style="display:grid; grid-template-columns: 1fr 1fr; gap:8px;">
+                <div class="form-group">
+                  <label class="form-label">Expected Departure</label>
+                  <input type="time" class="form-input" value="16:00" />
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Expected Return</label>
+                  <input type="time" class="form-input" value="20:00" />
+                </div>
+              </div>
+
+              <button class="btn btn-primary" onclick="showToast('Outing Pass request submitted! Guardian will receive In-App authorization alert.');">
+                Submit Outing Request
+              </button>
+
+              <div style="background:#090f1f; border:1px solid var(--border-subtle); padding:10px; border-radius:6px; font-size:0.72rem; color:var(--text-muted); margin-top:8px;">
+                <strong style="color:#34d399;">In-App Notice:</strong> Your guardian authorizes pass requests directly in their Parent App using an SMS OTP.
+              </div>
+            </div>
+          </div>
+        `;
+      } 
+      
+      // 4. PARENT APP VIEW
+      else if (currentView === "parent") {
+        container.innerHTML = `
+          <!-- Parent Guardian Multi-Ward Experience -->
+          <div class="ui-card">
+            <div class="ui-card-header">
+              <div>
+                <div class="ui-card-title">Parent Guardian Portal (Multi-Child Cross-City)</div>
+                <div style="font-size:0.72rem; color:var(--text-muted);">Guardian: Rajesh Sharma (Phone: +91 98110 99881) • In-App Safety Tracking</div>
+              </div>
+              <span class="saas-pill">2 WARDS REGISTERED</span>
+            </div>
+
+            <!-- Cross-City Ward Cards -->
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:12px; margin-top:8px;">
+              <div style="background:#090f1f; border:1px solid var(--border-strong); border-radius:var(--radius-md); padding:12px;">
+                <div style="display:flex; justify-content:space-between;">
+                  <strong style="color:#fff;">Aarav Sharma</strong>
+                  <span class="status-pill status-inside">INSIDE HOSTEL</span>
+                </div>
+                <div style="font-size:0.7rem; color:var(--text-muted); margin:4px 0;">
+                  📍 Shivalik North Campus • Delhi NCR • Room B-204
+                </div>
+                <div style="font-size:0.68rem; color:#34d399;">✓ Safe inside hostel. Curfew tonight at 20:30.</div>
+              </div>
+
+              <div style="background:#090f1f; border:1px solid #f59e0b; border-radius:var(--radius-md); padding:12px;">
+                <div style="display:flex; justify-content:space-between;">
+                  <strong style="color:#fff;">Ananya Sharma</strong>
+                  <span class="status-pill status-outside">OUTING PENDING APPROVAL</span>
+                </div>
+                <div style="font-size:0.7rem; color:var(--text-muted); margin:4px 0;">
+                  📍 Aravalli Tech Park • Bengaluru • Room W1-305
+                </div>
+                <div style="font-size:0.68rem; color:#fbbf24;">⚡ Weekend Leave requested for IISC Tech Symposium.</div>
+              </div>
+            </div>
+
+            <!-- In-App Outing Pass Authorization Queue -->
+            <div style="margin-top:12px;">
+              <div style="font-size:0.78rem; font-weight:800; color:#fff; margin-bottom:8px;">
+                Pending Outing Pass Requests (In-App SMS OTP Endorsement)
+              </div>
+              ${phase1Data.pendingParentPasses.length === 0 ? `
+                <div style="padding:16px; background:#090f1f; border-radius:6px; font-size:0.75rem; color:var(--text-dim); text-align:center;">
+                  No pending pass requests. All wards currently accounted for.
+                </div>
+              ` : phase1Data.pendingParentPasses.map(p => `
+                <div style="background:#091222; border:1px solid rgba(245,158,11,0.3); border-radius:var(--radius-sm); padding:12px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+                  <div>
+                    <div style="font-weight:700; color:#fff;">${p.studentName} — ${p.type} (${p.city})</div>
+                    <div style="font-size:0.7rem; color:var(--text-muted);">Destination: ${p.destination} • Expected Return: ${p.returnExpected}</div>
+                  </div>
+                  <div style="display:flex; gap:6px;">
+                    <button class="btn btn-danger btn-sm" onclick="showToast('Outing Pass Denied.');">Deny</button>
+                    <button class="btn btn-success btn-sm" onclick="openParentOtpModal('${p.id}')">
+                      Verify SMS OTP &amp; Approve In-App
+                    </button>
+                  </div>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+        `;
+      } 
+      
+      // 5. SAAS PRICING VIEW
+      else if (currentView === "pricing") {
+        container.innerHTML = `
+          <!-- SaaS Phase 1 Pricing Matrix -->
+          <div class="ui-card">
+            <div class="ui-card-header">
+              <div>
+                <div class="ui-card-title">HostelSafe Phase 1: Pure Software SaaS Commercials</div>
+                <div style="font-size:0.72rem; color:var(--text-muted);">Budget-friendly, 100% cloud plans with zero upfront hardware cost</div>
+              </div>
+              <span class="phase-badge">SOFTWARE PRICING</span>
+            </div>
+
+            <div class="pricing-grid" style="margin-top:8px;">
+              <!-- Tier 1 -->
+              <div class="plan-card">
+                <div style="font-size:0.95rem; font-weight:800; color:#fff;">Starter Digital</div>
+                <div style="font-size:0.7rem; color:var(--text-muted);">For Independent PGs &amp; Single Hostels</div>
+                <div class="plan-price">₹1,999 <span style="font-size:0.7rem; color:var(--text-muted);">/ month</span></div>
+                <div style="font-size:0.72rem; color:var(--text-muted); display:flex; flex-direction:column; gap:6px; margin:8px 0;">
+                  <div>✓ Up to 80 Resident Beds</div>
+                  <div>✓ 1 Hostel Property</div>
+                  <div>✓ Dedicated Admin &amp; Warden Web Dashboard</div>
+                  <div>✓ Dynamic QR Passes (Zero Hardware)</div>
+                  <div>✓ WebCam QR Scanner &amp; Manual Roll Search</div>
+                  <div>✓ SMS OTP Authentication</div>
+                  <div>✓ In-App Curfew Defaulter Alerts</div>
+                  <div>✓ Room &amp; Rent Ledger</div>
+                </div>
+                <button class="btn btn-secondary btn-sm" onclick="showToast('Active Plan: Starter Digital');">Current Plan</button>
+              </div>
+
+              <!-- Tier 2 -->
+              <div class="plan-card active">
+                <div style="position:absolute; top:-10px; right:12px; background:#10b981; color:#fff; font-size:0.58rem; font-weight:800; padding:2px 8px; border-radius:9999px;">MOST POPULAR</div>
+                <div style="font-size:0.95rem; font-weight:800; color:#fff;">Campus Digital Pro</div>
+                <div style="font-size:0.7rem; color:var(--text-muted);">For Multi-Wing Hostels &amp; Coaching Hubs</div>
+                <div class="plan-price">₹5,999 <span style="font-size:0.7rem; color:var(--text-muted);">/ month</span></div>
+                <div style="font-size:0.72rem; color:var(--text-muted); display:flex; flex-direction:column; gap:6px; margin:8px 0;">
+                  <div>✓ Up to 400 Resident Beds</div>
+                  <div>✓ Up to 3 Venues / Campuses</div>
+                  <div>✓ Multi-Property Admin Web Dashboard</div>
+                  <div>✓ Multi-Child Cross-City Guardian Portal</div>
+                  <div>✓ In-App Outing Pass Approval with SMS OTP</div>
+                  <div>✓ In-App Evening Curfew Defaulter Broadcast</div>
+                  <div>✓ Regulatory Compliance Police Audit Export</div>
+                  <div>✓ Zero Physical Hardware Required</div>
+                </div>
+                <button class="btn btn-success btn-sm" onclick="showToast('Simulated Plan Upgrade to Campus Digital Pro! Invoice INV-2026-P1 generated.');">
+                  Upgrade to Campus Digital Pro
+                </button>
+              </div>
+
+              <!-- Upgrade to Phase 2 Banner Card -->
+              <div class="plan-card" style="border-style:dashed; border-color:#38bdf8; background:rgba(56,189,248,0.03);">
+                <div style="font-size:0.95rem; font-weight:800; color:#38bdf8;">Need Physical Turnstiles?</div>
+                <div style="font-size:0.7rem; color:var(--text-muted);">Explore Phase 2 IoT Hardware Edition</div>
+                <div style="font-size:0.75rem; color:var(--text-dim); margin:10px 0; line-height:1.4;">
+                  Upgrade anytime to connect Mantra USB biometric scanners, motorized flap barriers, and AI face kiosks.
+                </div>
+                <a href="phase2.html" class="btn btn-primary btn-sm" style="margin-top:auto; text-decoration:none;">
+                  View Phase 2 Hardware Suite &rarr;
+                </a>
+              </div>
+            </div>
+          </div>
+        `;
+      }
+    }
+
+    // Initialize on load
+    render();
+  </script>
+</body>
+</html>
